@@ -27,12 +27,64 @@
     { id: 'zumro', name: 'ZUMRO', initials: 'ZU' },
   ];
 
-  var values = {};
-  VENDORS.forEach(function (v) {
-    values[v.id] = SPECS.map(function () {
-      return null;
-    });
-  });
+  // Each array index matches SPECS (same order). Replace null with cell text as data is confirmed.
+  var values = {
+    'blu-med': [
+      null, // External dimensions (L × W × H)
+      null, // Interior floor space
+      null, // Wind resistance rating
+      null, // Snow load
+      null, // Fire resistance rating
+      null, // Setup time & personnel required
+      null, // Recommended ground surface
+      null, // Expected lifespan
+      null, // Repair expectations & procedures
+    ],
+    dlx: [
+      null, // External dimensions (L × W × H)
+      null, // Interior floor space
+      null, // Wind resistance rating
+      null, // Snow load
+      null, // Fire resistance rating
+      null, // Setup time & personnel required
+      null, // Recommended ground surface
+      null, // Expected lifespan
+      null, // Repair expectations & procedures
+    ],
+    hdt: [
+      null, // External dimensions (L × W × H)
+      null, // Interior floor space
+      null, // Wind resistance rating
+      null, // Snow load
+      null, // Fire resistance rating
+      null, // Setup time & personnel required
+      null, // Recommended ground surface
+      null, // Expected lifespan
+      null, // Repair expectations & procedures
+    ],
+    western: [
+      null, // External dimensions (L × W × H)
+      null, // Interior floor space
+      null, // Wind resistance rating
+      null, // Snow load
+      null, // Fire resistance rating
+      null, // Setup time & personnel required
+      null, // Recommended ground surface
+      null, // Expected lifespan
+      null, // Repair expectations & procedures
+    ],
+    zumro: [
+      null, // External dimensions (L × W × H)
+      null, // Interior floor space
+      null, // Wind resistance rating
+      null, // Snow load
+      null, // Fire resistance rating
+      null, // Setup time & personnel required
+      null, // Recommended ground surface
+      null, // Expected lifespan
+      null, // Repair expectations & procedures
+    ],
+  };
 
   window.VPC_COMPARISON_DATA = {
     vendors: VENDORS,
