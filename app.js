@@ -247,20 +247,16 @@
       var q = normalizeFilter(filterInput && filterInput.value);
       renderThead(thead, vendors, visibility);
       var count = 0;
-      var tbodyEl = tbody;
-      var filterQ = q;
-
-      tbodyEl.innerHTML = '';
       data.sections.forEach(function (sec) {
         (sec.rows || []).forEach(function (row) {
-          if (rowMatchesFilter(row, filterQ)) count++;
+          if (rowMatchesFilter(row, q)) count++;
         });
       });
 
       var any = renderTbody(tbody, data, visibility, q);
       updateFilterStatus(statusEl, q, any ? count : 0);
 
-      if (!any && filterQ) {
+      if (!any && q) {
         var empty = document.createElement('tr');
         var td = document.createElement('td');
         td.colSpan = 1 + vendors.length;
