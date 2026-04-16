@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>VPC vendor comparison</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#comparison-main">Skip to comparison table</a>
+
+  <header class="page-header" role="banner">
+    <div class="page-header__inner">
+      <h1 class="page-title" id="page-title">VPC vendor comparison</h1>
+      <p class="page-subtitle" id="page-subtitle" hidden></p>
+    </div>
+  </header>
+
+  <main id="comparison-main" class="main" tabindex="-1">
+    <section class="toolbar" aria-label="Table controls">
+      <div class="toolbar__row">
+        <label class="field">
+          <span class="field__label">Filter rows</span>
+          <input type="search" id="row-filter" class="field__input" placeholder="Search specification labels…" autocomplete="off" spellcheck="false">
+        </label>
+        <p class="toolbar__hint" id="filter-status" aria-live="polite"></p>
+      </div>
+      <fieldset class="vendor-toggles" id="vendor-toggles">
+        <legend class="vendor-toggles__legend">Show vendors</legend>
+        <!-- filled by app.js -->
+      </fieldset>
+    </section>
+
+    <div class="table-scroll" role="region" aria-label="Comparison table" tabindex="0">
+      <table class="comparison-table" id="comparison-table">
+        <caption class="visually-hidden">Vendor specifications comparison</caption>
+        <thead id="comparison-thead"></thead>
+        <tbody id="comparison-tbody"></tbody>
+      </table>
+    </div>
+
+    <footer class="page-footer">
+      <p class="page-footer__note" id="page-footnote"></p>
+    </footer>
+  </main>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
