@@ -1,47 +1,58 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>VPC vendor comparison</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VPC — Vendor Comparison</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <a class="skip-link" href="#comparison-main">Skip to comparison table</a>
 
-  <header class="page-header" role="banner">
-    <div class="page-header__inner">
-      <h1 class="page-title" id="page-title">VPC vendor comparison</h1>
-      <p class="page-subtitle" id="page-subtitle" hidden></p>
-    </div>
-  </header>
-
-  <main id="comparison-main" class="main" tabindex="-1">
-    <section class="toolbar" aria-label="Table controls">
-      <div class="toolbar__row">
-        <label class="field">
-          <span class="field__label">Filter rows</span>
-          <input type="search" id="row-filter" class="field__input" placeholder="Search specification labels…" autocomplete="off" spellcheck="false">
-        </label>
-        <p class="toolbar__hint" id="filter-status" aria-live="polite"></p>
+<header class="page-header">
+  <div class="page-header-inner">
+    <div class="logo">
+      <div class="logo-mark">VPC</div>
+      <div>
+        <span class="logo-text">Vendor Comparison</span>
+        <span class="logo-sub">/ Portable Shelter Systems</span>
       </div>
-      <fieldset class="vendor-toggles" id="vendor-toggles"></fieldset>
-    </section>
-
-    <div class="table-scroll" role="region" aria-label="Comparison table" tabindex="0">
-      <table class="comparison-table" id="comparison-table">
-        <caption class="visually-hidden">Vendor specifications comparison</caption>
-        <thead id="comparison-thead"></thead>
-        <tbody id="comparison-tbody"></tbody>
-      </table>
     </div>
+    <div class="header-meta" id="header-meta">5 vendors · 9 specifications</div>
+  </div>
+</header>
 
-    <footer class="page-footer">
-      <p class="page-footer__note" id="page-footnote"></p>
-    </footer>
-  </main>
+<main class="main">
+  <div class="section-title">Compare Vendors</div>
+  <p class="section-sub">Select the vendors and specifications you want to compare. Remove vendors you've ruled out.</p>
 
-  <script src="data.js"></script>
-  <script src="app.js"></script>
+  <div class="controls-bar">
+    <div class="control-group">
+      <div class="control-group-label">Vendors</div>
+      <div class="chip-row" id="vendor-chips"></div>
+    </div>
+    <div class="control-group" style="border-left: 1px solid var(--border); padding-left: 1.25rem; margin-left: 0.25rem;">
+      <div class="control-group-label">Specifications</div>
+      <div class="chip-row" id="spec-chips"></div>
+    </div>
+  </div>
+
+  <div class="comparison-meta">
+    <div class="comparison-count" id="comparison-count"></div>
+    <div class="restore-row" id="restore-row"></div>
+  </div>
+
+  <div class="scroll-hint">← Scroll to see all vendors →</div>
+
+  <div class="table-wrap" id="table-wrap"></div>
+</main>
+
+<footer class="page-footer">
+  <span>VPC Portable Shelter Comparison · Data pending vendor submission</span>
+  <span id="footer-right"></span>
+</footer>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
 </body>
 </html>

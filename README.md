@@ -1,43 +1,24 @@
 # VPC vendor comparison
 
-Standalone HTML/CSS/JavaScript comparison matrix: open `index.html` in a browser (double-click or via a local static server). No build step or dependencies.
+Standalone HTML/CSS/JavaScript tool: open `index.html` in a browser (double-click or a local static server). No build step or dependencies. Uses Google Fonts (DM Sans / DM Mono) from the CDN link in `index.html`.
 
 ## File roles
 
 | File | Purpose |
 |------|---------|
-| `index.html` | Page structure and script order |
-| `styles.css` | Layout and visual styling |
-| `app.js` | Renders the table, filter, and vendor show/hide controls |
-| `data.js` | **All vendor and specification content** — edit this when specs change |
+| `index.html` | Page shell, font link, `styles.css`, then `data.js` → `app.js` |
+| `styles.css` | All styling |
+| `app.js` | Vendor/spec chips, table render, remove/restore vendor |
+| `data.js` | **All vendor rows and cell values** — edit this when specs change |
 
 ## Adding or changing data
 
-Edit **`data.js`** only. It defines a global object `VPC_COMPARISON` with:
+Edit **`data.js` only.** It assigns `window.VPC_COMPARISON_DATA` with:
 
-- **`meta`** — `title`, optional `subtitle`, optional `footnote` (strings shown in the header/footer).
-- **`vendors`** — Array of `{ id, name }`. Each `id` must be unique and stable (use lowercase letters, numbers, hyphens). Column order follows this array.
-- **`sections`** — Groups of rows. Each section has `id`, `title`, and `rows`.
-- **`rows`** — Each row has `id`, `label`, and `values`.  
-  **`values`** is an object whose keys are vendor `id`s and whose values are the cell text (use an em dash or `—` for not applicable if you like).
+- **`vendors`** — `{ id, name, initials }` for each column. `initials` appear in the header badge.
+- **`specs`** — Array of specification labels (row order).
+- **`values`** — Object keyed by vendor `id`. Each value is an array with **one entry per spec**, in the same order as `specs`. Use `null` or `""` for cells that should show the **TBD** pill; otherwise use a string for the cell text.
 
-Example row:
+When you add a vendor, add a key under `values` with an array of the same length as `specs`. When you add a spec row, append one label to `specs` and append one value to **each** vendor’s array.
 
-```js
-{
-  id: 'example-width',
-  label: 'Nominal width (ft)',
-  values: {
-    'blu-med': '24',
-    dlx: '21.5',
-    western: '—',
-  },
-  note: 'Optional note shown under the label on wide screens.',
-}
-```
-
-After saving `data.js`, refresh the browser. Vendor visibility (checkboxes) is remembered for the session in `sessionStorage`.
-
-## Reference behavior
-
-If you have a reference implementation (e.g. `vpc_comparison.html`), place it in this folder or share its markup/behavior so the app can be matched to it.
+Refresh the browser after editing.

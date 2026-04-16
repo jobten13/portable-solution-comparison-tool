@@ -1,279 +1,208 @@
 (function () {
   'use strict';
 
-  function $(id) {
-    return document.getElementById(id);
-  }
+  var VENDORS;
+  var SPECS;
+  var DATA;
 
-  function normalizeFilter(s) {
-    return String(s || '')
-      .trim()
-      .toLowerCase();
-  }
+  var activeVendors;
+  var removedVendors;
+  var activeSpecs;
 
-  function readData() {
-    var d = window.VPC_COMPARISON;
-    if (!d || !Array.isArray(d.vendors) || !Array.isArray(d.sections)) {
-      throw new Error('VPC_COMPARISON is missing or invalid (see data.js).');
+  function loadData() {
+    var raw = window.VPC_COMPARISON_DATA;
+    if (!raw || !raw.vendors || !raw.specs || !raw.values) {
+      throw new Error('VPC_COMPARISON_DATA missing or invalid (see data.js).');
     }
-    return d;
+    VENDORS = raw.vendors;
+    SPECS = raw.specs;
+    DATA = raw.values;
   }
 
-  function applyMeta(meta) {
-    var title = (meta && meta.title) || 'VPC vendor comparison';
-    document.title = title;
-    var h1 = $('page-title');
-    if (h1) h1.textContent = title;
-
-    var sub = $('page-subtitle');
-    if (sub) {
-      var st = meta && meta.subtitle;
-      if (st) {
-        sub.textContent = st;
-        sub.hidden = false;
-      } else {
-        sub.textContent = '';
-        sub.hidden = true;
-      }
-    }
-
-    var fn = $('page-footnote');
-    if (fn) {
-      var foot = meta && meta.footnote;
-      if (foot) {
-        fn.textContent = foot;
-        fn.hidden = false;
-      } else {
-        fn.textContent = '';
-        fn.hidden = true;
-      }
-    }
-  }
-
-  function buildVendorVisibilityKey(vendors) {
-    try {
-      var raw = sessionStorage.getItem('vpcComparisonVendorVisibility');
-      if (!raw) return null;
-      var o = JSON.parse(raw);
-      if (!o || typeof o !== 'object') return null;
-      var map = {};
-      vendors.forEach(function (v) {
-        if (o[v.id] === false) map[v.id] = false;
-        else map[v.id] = true;
-      });
-      return map;
-    } catch (e) {
-      return null;
-    }
-  }
-
-  function saveVendorVisibility(visibility) {
-    try {
-      sessionStorage.setItem('vpcComparisonVendorVisibility', JSON.stringify(visibility));
-    } catch (e) {
-      /* ignore */
-    }
-  }
-
-  function renderThead(thead, vendors, visibility) {
-    thead.innerHTML = '';
-    var tr = document.createElement('tr');
-    var thSpec = document.createElement('th');
-    thSpec.scope = 'col';
-    thSpec.className = 'comparison-table__corner';
-    thSpec.textContent = 'Specification';
-    tr.appendChild(thSpec);
-
-    vendors.forEach(function (v) {
-      var th = document.createElement('th');
-      th.scope = 'col';
-      th.className = 'comparison-table__vendor';
-      th.dataset.vendorId = v.id;
-      th.textContent = v.name;
-      if (visibility[v.id] === false) {
-        th.classList.add('is-hidden-col');
-      }
-      tr.appendChild(th);
-    });
-    thead.appendChild(tr);
-  }
-
-  function rowMatchesFilter(row, q) {
-    if (!q) return true;
-    var label = normalizeFilter(row.label);
-    if (label.indexOf(q) !== -1) return true;
-    if (row.note && normalizeFilter(row.note).indexOf(q) !== -1) return true;
-    var vals = row.values || {};
-    for (var k in vals) {
-      if (Object.prototype.hasOwnProperty.call(vals, k)) {
-        if (normalizeFilter(vals[k]).indexOf(q) !== -1) return true;
-      }
-    }
-    return false;
-  }
-
-  function renderTbody(tbody, data, visibility, filterQ) {
-    tbody.innerHTML = '';
-    var vendors = data.vendors;
-    var anyVisible = false;
-
-    data.sections.forEach(function (sec) {
-      var secHasVisible = false;
-      var rows = sec.rows || [];
-
-      rows.forEach(function (row) {
-        if (rowMatchesFilter(row, filterQ)) secHasVisible = true;
-      });
-      if (!secHasVisible && filterQ) return;
-
-      var secRow = document.createElement('tr');
-      secRow.className = 'comparison-table__section-row';
-      var secCell = document.createElement('th');
-      secCell.colSpan = 1 + vendors.length;
-      secCell.scope = 'colgroup';
-      secCell.className = 'comparison-table__section';
-      secCell.textContent = sec.title || '';
-      secRow.appendChild(secCell);
-      tbody.appendChild(secRow);
-
-      rows.forEach(function (row) {
-        if (!rowMatchesFilter(row, filterQ)) return;
-        anyVisible = true;
-
-        var tr = document.createElement('tr');
-        tr.className = 'comparison-table__spec-row';
-        tr.dataset.rowId = row.id || '';
-
-        var th = document.createElement('th');
-        th.scope = 'row';
-        th.className = 'comparison-table__label';
-        var labelSpan = document.createElement('span');
-        labelSpan.className = 'comparison-table__label-text';
-        labelSpan.textContent = row.label || '';
-        th.appendChild(labelSpan);
-        if (row.note) {
-          var note = document.createElement('span');
-          note.className = 'comparison-table__label-note';
-          note.textContent = row.note;
-          th.appendChild(note);
-        }
-        tr.appendChild(th);
-
-        vendors.forEach(function (v) {
-          var td = document.createElement('td');
-          td.className = 'comparison-table__value';
-          td.dataset.vendorId = v.id;
-          var val = row.values && Object.prototype.hasOwnProperty.call(row.values, v.id) ? row.values[v.id] : '—';
-          td.textContent = val === undefined || val === null || val === '' ? '—' : String(val);
-          if (visibility[v.id] === false) {
-            td.classList.add('is-hidden-col');
-          }
-          tr.appendChild(td);
-        });
-
-        tbody.appendChild(tr);
-      });
-    });
-
-    return anyVisible;
-  }
-
-  function renderVendorToggles(container, vendors, visibility, onChange) {
-    container.innerHTML = '';
-    var legend = document.createElement('legend');
-    legend.className = 'vendor-toggles__legend';
-    legend.textContent = 'Show vendors';
-    container.appendChild(legend);
-
-    vendors.forEach(function (v) {
-      var id = 'vendor-toggle-' + v.id;
-      var label = document.createElement('label');
-      label.className = 'vendor-toggle';
-      label.htmlFor = id;
-
-      var input = document.createElement('input');
-      input.type = 'checkbox';
-      input.id = id;
-      input.checked = visibility[v.id] !== false;
-      input.dataset.vendorId = v.id;
-      input.addEventListener('change', function () {
-        visibility[v.id] = input.checked;
-        saveVendorVisibility(visibility);
-        onChange();
-      });
-
-      var span = document.createElement('span');
-      span.textContent = v.name;
-
-      label.appendChild(input);
-      label.appendChild(span);
-      container.appendChild(label);
+  function renderVendorChips() {
+    var wrap = document.getElementById('vendor-chips');
+    wrap.innerHTML = '';
+    VENDORS.forEach(function (v) {
+      if (removedVendors.indexOf(v.id) !== -1) return;
+      var btn = document.createElement('button');
+      var isActive = activeVendors.has(v.id);
+      btn.className = 'chip' + (isActive ? ' active' : '');
+      btn.innerHTML = (isActive ? '<span class="chip-check">✓</span>' : '') + v.name;
+      btn.onclick = function () {
+        if (activeVendors.has(v.id)) activeVendors.delete(v.id);
+        else activeVendors.add(v.id);
+        render();
+      };
+      wrap.appendChild(btn);
     });
   }
 
-  function updateFilterStatus(statusEl, filterQ, rowCount) {
-    if (!statusEl) return;
-    if (!filterQ) {
-      statusEl.textContent = '';
+  function renderSpecChips() {
+    var wrap = document.getElementById('spec-chips');
+    wrap.innerHTML = '';
+    SPECS.forEach(function (s) {
+      var btn = document.createElement('button');
+      var isActive = activeSpecs.has(s);
+      btn.className = 'chip' + (isActive ? ' active' : '');
+      var label = s.length > 28 ? s.slice(0, 26) + '…' : s;
+      btn.innerHTML = (isActive ? '<span class="chip-check">✓</span>' : '') + label;
+      btn.title = s;
+      btn.onclick = function () {
+        if (activeSpecs.has(s)) activeSpecs.delete(s);
+        else activeSpecs.add(s);
+        render();
+      };
+      wrap.appendChild(btn);
+    });
+  }
+
+  function renderMeta() {
+    var visible = VENDORS.filter(function (v) {
+      return activeVendors.has(v.id) && removedVendors.indexOf(v.id) === -1;
+    });
+    var specs = SPECS.filter(function (s) {
+      return activeSpecs.has(s);
+    });
+    document.getElementById('comparison-count').innerHTML =
+      'Showing <strong>' +
+      visible.length +
+      '</strong> vendor' +
+      (visible.length !== 1 ? 's' : '') +
+      ' · <strong>' +
+      specs.length +
+      '</strong> specification' +
+      (specs.length !== 1 ? 's' : '');
+    document.getElementById('header-meta').textContent =
+      VENDORS.length + ' vendors · ' + SPECS.length + ' specifications';
+
+    var restoreRow = document.getElementById('restore-row');
+    if (removedVendors.length === 0) {
+      restoreRow.innerHTML = '';
       return;
     }
-    if (rowCount === 0) {
-      statusEl.textContent = 'No rows match this filter.';
-    } else {
-      statusEl.textContent = 'Showing ' + rowCount + ' matching row(s).';
+    var html = '<span class="restore-label">Removed:</span>';
+    removedVendors.forEach(function (id) {
+      var v = VENDORS.find(function (x) {
+        return x.id === id;
+      });
+      html +=
+        '<button type="button" class="restore-btn" data-restore-id="' +
+        id +
+        '">+ ' +
+        v.name +
+        '</button>';
+    });
+    restoreRow.innerHTML = html;
+    restoreRow.querySelectorAll('[data-restore-id]').forEach(function (btn) {
+      btn.onclick = function () {
+        restoreVendor(btn.getAttribute('data-restore-id'));
+      };
+    });
+  }
+
+  function renderTable() {
+    var wrap = document.getElementById('table-wrap');
+    var visibleVendors = VENDORS.filter(function (v) {
+      return activeVendors.has(v.id) && removedVendors.indexOf(v.id) === -1;
+    });
+    var visibleSpecs = SPECS.filter(function (s) {
+      return activeSpecs.has(s);
+    });
+
+    if (visibleVendors.length === 0) {
+      wrap.innerHTML =
+        '<div class="empty-table"><div class="empty-icon">□</div><p>No vendors selected.<br>Use the toggles above to add vendors to compare.</p></div>';
+      return;
     }
+    if (visibleSpecs.length === 0) {
+      wrap.innerHTML =
+        '<div class="empty-table"><div class="empty-icon">≡</div><p>No specifications selected.<br>Enable at least one spec filter above.</p></div>';
+      return;
+    }
+
+    var colHtml = '<col class="spec-col">';
+    visibleVendors.forEach(function () {
+      colHtml += '<col>';
+    });
+
+    var headHtml = '<tr><th></th>';
+    visibleVendors.forEach(function (v) {
+      headHtml +=
+        '<th><div class="vendor-header-cell">' +
+        '<div class="vendor-badge">' +
+        v.initials +
+        '</div>' +
+        '<div class="vendor-full-name">' +
+        v.name +
+        '</div>' +
+        '<button type="button" class="remove-vendor-btn" data-remove-id="' +
+        v.id +
+        '">✕ Remove</button>' +
+        '</div></th>';
+    });
+    headHtml += '</tr>';
+
+    var bodyHtml = '';
+    visibleSpecs.forEach(function (spec) {
+      var specIdx = SPECS.indexOf(spec);
+      bodyHtml += '<tr><td class="spec-label-cell">' + spec + '</td>';
+      visibleVendors.forEach(function (v) {
+        var val = DATA[v.id][specIdx];
+        var display = val ? val : '<span class="tbd-pill">TBD</span>';
+        bodyHtml += '<td class="data-cell">' + display + '</td>';
+      });
+      bodyHtml += '</tr>';
+    });
+
+    wrap.innerHTML =
+      '<table><colgroup>' +
+      colHtml +
+      '</colgroup><thead>' +
+      headHtml +
+      '</thead><tbody>' +
+      bodyHtml +
+      '</tbody></table>';
+
+    wrap.querySelectorAll('[data-remove-id]').forEach(function (btn) {
+      btn.onclick = function () {
+        removeVendor(btn.getAttribute('data-remove-id'));
+      };
+    });
+  }
+
+  function removeVendor(id) {
+    activeVendors.delete(id);
+    removedVendors.push(id);
+    render();
+  }
+
+  function restoreVendor(id) {
+    removedVendors = removedVendors.filter(function (x) {
+      return x !== id;
+    });
+    activeVendors.add(id);
+    render();
+  }
+
+  function render() {
+    renderVendorChips();
+    renderSpecChips();
+    renderMeta();
+    renderTable();
+    document.getElementById('footer-right').textContent = new Date().toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+    });
   }
 
   function init() {
-    var data = readData();
-    applyMeta(data.meta || {});
-
-    var vendors = data.vendors;
-    var visibility = buildVendorVisibilityKey(vendors);
-    if (!visibility) {
-      visibility = {};
-      vendors.forEach(function (v) {
-        visibility[v.id] = true;
-      });
-    }
-
-    var thead = $('comparison-thead');
-    var tbody = $('comparison-tbody');
-    var filterInput = $('row-filter');
-    var statusEl = $('filter-status');
-    var toggleRoot = $('vendor-toggles');
-
-    function paint() {
-      var q = normalizeFilter(filterInput && filterInput.value);
-      renderThead(thead, vendors, visibility);
-      var count = 0;
-      data.sections.forEach(function (sec) {
-        (sec.rows || []).forEach(function (row) {
-          if (rowMatchesFilter(row, q)) count++;
-        });
-      });
-
-      var any = renderTbody(tbody, data, visibility, q);
-      updateFilterStatus(statusEl, q, any ? count : 0);
-
-      if (!any && q) {
-        var empty = document.createElement('tr');
-        var td = document.createElement('td');
-        td.colSpan = 1 + vendors.length;
-        td.className = 'comparison-table__empty';
-        td.textContent = 'No specifications match this filter.';
-        empty.appendChild(td);
-        tbody.appendChild(empty);
-      }
-    }
-
-    renderVendorToggles(toggleRoot, vendors, visibility, paint);
-
-    if (filterInput) {
-      filterInput.addEventListener('input', paint);
-    }
-
-    paint();
+    loadData();
+    activeVendors = new Set(VENDORS.map(function (v) {
+      return v.id;
+    }));
+    removedVendors = [];
+    activeSpecs = new Set(SPECS);
+    render();
   }
 
   if (document.readyState === 'loading') {
