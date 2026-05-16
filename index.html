@@ -3,54 +3,65 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>VPC Quick Compare Table</title>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <title>VPC Comparison Tool</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500;600&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
 <header class="page-header">
-  <div class="page-header-inner">
-    <div class="logo">
-      <div class="logo-mark">VPC</div>
-      <div>
-        <span class="logo-text">Quick Compare Table</span>
-        <span class="logo-sub">/ Portable Shelter Systems</span>
-      </div>
-    </div>
-    <div class="header-meta" id="header-meta">5 vendors · 9 specifications</div>
-  </div>
+  <h1 class="page-title">VPC Comparison Tool</h1>
+  <p class="page-subtitle">Side-by-side comparison of portable shelter products.</p>
 </header>
 
-<main class="main">
-  <div class="section-title">Compare Vendors</div>
-  <p class="section-sub">Select the vendors and specifications you want to compare. Remove vendors you've ruled out.</p>
-
-  <div class="controls-bar">
-    <div class="control-group">
-      <div class="control-group-label">Vendors</div>
-      <div class="chip-row" id="vendor-chips"></div>
-    </div>
-    <div class="control-group" style="border-left: 1px solid var(--border); padding-left: 1.25rem; margin-left: 0.25rem;">
-      <div class="control-group-label">Specifications</div>
-      <div class="chip-row" id="spec-chips"></div>
-    </div>
+<main class="main" data-vpc-comparison>
+  <div class="table-panel">
+    <table class="compare-table" data-compare-table>
+      <thead>
+        <tr>
+          <th class="corner-cell" scope="col"></th>
+          <th class="col-head" scope="col" data-col-head="0">
+            <div class="col-head-inner">
+              <div class="select-floater-host">
+                <div class="select-anchor">
+                  <select class="product-select" data-product-select="0" aria-label="Product for column 1"></select>
+                  <button type="button" class="info-trigger" data-info-trigger="0" aria-label="HDT connector note" aria-expanded="false" aria-controls="vpc-hdt-popover" hidden>ⓘ</button>
+                </div>
+              </div>
+            </div>
+          </th>
+          <th class="col-head" scope="col" data-col-head="1">
+            <div class="col-head-inner">
+              <div class="select-floater-host">
+                <div class="select-anchor">
+                  <select class="product-select" data-product-select="1" aria-label="Product for column 2"></select>
+                  <button type="button" class="info-trigger" data-info-trigger="1" aria-label="HDT connector note" aria-expanded="false" aria-controls="vpc-hdt-popover" hidden>ⓘ</button>
+                </div>
+              </div>
+            </div>
+          </th>
+          <th class="col-head" scope="col" data-col-head="2">
+            <div class="col-head-inner">
+              <div class="select-floater-host">
+                <div class="select-anchor">
+                  <select class="product-select" data-product-select="2" aria-label="Product for column 3"></select>
+                  <button type="button" class="info-trigger" data-info-trigger="2" aria-label="HDT connector note" aria-expanded="false" aria-controls="vpc-hdt-popover" hidden>ⓘ</button>
+                </div>
+              </div>
+            </div>
+          </th>
+        </tr>
+      </thead>
+      <tbody data-spec-body>
+        <!-- Rows injected by app.js from specRows -->
+      </tbody>
+    </table>
   </div>
-
-  <div class="comparison-meta">
-    <div class="comparison-count" id="comparison-count"></div>
-    <div class="restore-row" id="restore-row"></div>
-  </div>
-
-  <div class="scroll-hint">← Scroll to see all vendors →</div>
-
-  <div class="table-wrap" id="table-wrap"></div>
 </main>
 
-<footer class="page-footer">
-  <span>VPC Portable Shelter Comparison · Data pending vendor submission</span>
-  <span id="footer-right"></span>
-</footer>
+<div class="popover" id="vpc-hdt-popover" role="dialog" aria-label="HDT note" hidden></div>
 
 <script src="data.js"></script>
 <script src="app.js"></script>

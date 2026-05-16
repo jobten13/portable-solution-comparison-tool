@@ -1,208 +1,270 @@
 (function () {
   'use strict';
 
-  var VENDORS;
-  var SPECS;
-  var DATA;
+  var EM_DASH = '\u2014';
 
-  var activeVendors;
-  var removedVendors;
-  var activeSpecs;
-
-  function loadData() {
-    var raw = window.VPC_COMPARISON_DATA;
-    if (!raw || !raw.vendors || !raw.specs || !raw.values) {
-      throw new Error('VPC_COMPARISON_DATA missing or invalid (see data.js).');
+  function getHdtInfo(data) {
+    for (var i = 0; i < data.vendors.length; i++) {
+      var v = data.vendors[i];
+      if (v.hasInfoPopover && v.infoText) {
+        return v.infoText;
+      }
     }
-    VENDORS = raw.vendors;
-    SPECS = raw.specs;
-    DATA = raw.values;
+    return null;
   }
 
-  function renderVendorChips() {
-    var wrap = document.getElementById('vendor-chips');
-    wrap.innerHTML = '';
-    VENDORS.forEach(function (v) {
-      if (removedVendors.indexOf(v.id) !== -1) return;
-      var btn = document.createElement('button');
-      var isActive = activeVendors.has(v.id);
-      btn.className = 'chip' + (isActive ? ' active' : '');
-      btn.innerHTML = (isActive ? '<span class="chip-check">✓</span>' : '') + v.name;
-      btn.onclick = function () {
-        if (activeVendors.has(v.id)) activeVendors.delete(v.id);
-        else activeVendors.add(v.id);
-        render();
-      };
-      wrap.appendChild(btn);
-    });
-  }
-
-  function renderSpecChips() {
-    var wrap = document.getElementById('spec-chips');
-    wrap.innerHTML = '';
-    SPECS.forEach(function (s) {
-      var btn = document.createElement('button');
-      var isActive = activeSpecs.has(s);
-      btn.className = 'chip' + (isActive ? ' active' : '');
-      var label = s.length > 28 ? s.slice(0, 26) + '…' : s;
-      btn.innerHTML = (isActive ? '<span class="chip-check">✓</span>' : '') + label;
-      btn.title = s;
-      btn.onclick = function () {
-        if (activeSpecs.has(s)) activeSpecs.delete(s);
-        else activeSpecs.add(s);
-        render();
-      };
-      wrap.appendChild(btn);
-    });
-  }
-
-  function renderMeta() {
-    var visible = VENDORS.filter(function (v) {
-      return activeVendors.has(v.id) && removedVendors.indexOf(v.id) === -1;
-    });
-    var specs = SPECS.filter(function (s) {
-      return activeSpecs.has(s);
-    });
-    document.getElementById('comparison-count').innerHTML =
-      'Showing <strong>' +
-      visible.length +
-      '</strong> vendor' +
-      (visible.length !== 1 ? 's' : '') +
-      ' · <strong>' +
-      specs.length +
-      '</strong> specification' +
-      (specs.length !== 1 ? 's' : '');
-    document.getElementById('header-meta').textContent =
-      VENDORS.length + ' vendors · ' + SPECS.length + ' specifications';
-
-    var restoreRow = document.getElementById('restore-row');
-    if (removedVendors.length === 0) {
-      restoreRow.innerHTML = '';
-      return;
+  function findProductContext(data, productId) {
+    if (!productId) return null;
+    for (var i = 0; i < data.vendors.length; i++) {
+      var vendor = data.vendors[i];
+      for (var j = 0; j < vendor.products.length; j++) {
+        var product = vendor.products[j];
+        if (product.id === productId) {
+          return { vendor: vendor, product: product };
+        }
+      }
     }
-    var html = '<span class="restore-label">Removed:</span>';
-    removedVendors.forEach(function (id) {
-      var v = VENDORS.find(function (x) {
-        return x.id === id;
+    return null;
+  }
+
+  function flatOptionLabel(vendor, product) {
+    return vendor.name + ' ' + EM_DASH + ' ' + product.name;
+  }
+
+  function updateSelectSelectionClass(selectEl) {
+    if (selectEl.value) {
+      selectEl.classList.add('has-selection');
+    } else {
+      selectEl.classList.remove('has-selection');
+    }
+  }
+
+  function buildProductSelect(selectEl, data) {
+    selectEl.innerHTML = '';
+    var first = document.createElement('option');
+    first.value = '';
+    first.textContent = 'Select a product \u25be';
+    selectEl.appendChild(first);
+
+    data.vendors.forEach(function (vendor) {
+      vendor.products.forEach(function (p) {
+        var opt = document.createElement('option');
+        opt.value = p.id;
+        opt.textContent = flatOptionLabel(vendor, p);
+        selectEl.appendChild(opt);
       });
-      html +=
-        '<button type="button" class="restore-btn" data-restore-id="' +
-        id +
-        '">+ ' +
-        v.name +
-        '</button>';
     });
-    restoreRow.innerHTML = html;
-    restoreRow.querySelectorAll('[data-restore-id]').forEach(function (btn) {
-      btn.onclick = function () {
-        restoreVendor(btn.getAttribute('data-restore-id'));
-      };
-    });
+    updateSelectSelectionClass(selectEl);
   }
 
-  function renderTable() {
-    var wrap = document.getElementById('table-wrap');
-    var visibleVendors = VENDORS.filter(function (v) {
-      return activeVendors.has(v.id) && removedVendors.indexOf(v.id) === -1;
-    });
-    var visibleSpecs = SPECS.filter(function (s) {
-      return activeSpecs.has(s);
-    });
-
-    if (visibleVendors.length === 0) {
-      wrap.innerHTML =
-        '<div class="empty-table"><div class="empty-icon">□</div><p>No vendors selected.<br>Use the toggles above to add vendors to compare.</p></div>';
-      return;
+  function renderValueCell(specKey, rawValue, productType) {
+    if (typeof rawValue === 'string' && rawValue.length > 0) {
+      var t = document.createTextNode(rawValue);
+      var wrap = document.createElement('span');
+      wrap.className = 'value-text';
+      wrap.appendChild(t);
+      return wrap;
     }
-    if (visibleSpecs.length === 0) {
-      wrap.innerHTML =
-        '<div class="empty-table"><div class="empty-icon">≡</div><p>No specifications selected.<br>Enable at least one spec filter above.</p></div>';
-      return;
+    if (
+      rawValue === null &&
+      specKey === 'bedCapacity' &&
+      productType === 'connector'
+    ) {
+      var na = document.createElement('span');
+      na.className = 'cell-na';
+      na.textContent = 'N/A';
+      return na;
     }
+    var pill = document.createElement('span');
+    pill.className = 'tbd-pill';
+    pill.textContent = 'TBD';
+    return pill;
+  }
 
-    var colHtml = '<col class="spec-col">';
-    visibleVendors.forEach(function () {
-      colHtml += '<col>';
-    });
-
-    var headHtml = '<tr><th></th>';
-    visibleVendors.forEach(function (v) {
-      headHtml +=
-        '<th><div class="vendor-header-cell">' +
-        '<div class="vendor-badge">' +
-        v.initials +
-        '</div>' +
-        '<div class="vendor-full-name">' +
-        v.name +
-        '</div>' +
-        '<button type="button" class="remove-vendor-btn" data-remove-id="' +
-        v.id +
-        '">✕ Remove</button>' +
-        '</div></th>';
-    });
-    headHtml += '</tr>';
-
-    var bodyHtml = '';
-    visibleSpecs.forEach(function (spec) {
-      var specIdx = SPECS.indexOf(spec);
-      bodyHtml += '<tr><td class="spec-label-cell">' + spec + '</td>';
-      visibleVendors.forEach(function (v) {
-        var val = DATA[v.id][specIdx];
-        var display = val ? val : '<span class="tbd-pill">TBD</span>';
-        bodyHtml += '<td class="data-cell">' + display + '</td>';
-      });
-      bodyHtml += '</tr>';
-    });
-
-    wrap.innerHTML =
-      '<table><colgroup>' +
-      colHtml +
-      '</colgroup><thead>' +
-      headHtml +
-      '</thead><tbody>' +
-      bodyHtml +
-      '</tbody></table>';
-
-    wrap.querySelectorAll('[data-remove-id]').forEach(function (btn) {
-      btn.onclick = function () {
-        removeVendor(btn.getAttribute('data-remove-id'));
-      };
+  function clearColumn(colIndex) {
+    var cells = document.querySelectorAll('td.value-cell[data-col="' + colIndex + '"]');
+    cells.forEach(function (cell) {
+      cell.innerHTML = '';
     });
   }
 
-  function removeVendor(id) {
-    activeVendors.delete(id);
-    removedVendors.push(id);
-    render();
+  function fillColumn(colIndex, productId, data) {
+    var ctx = findProductContext(data, productId);
+    var specMap = data.specs[productId] || {};
+    var productType = ctx.product.type;
+
+    var cells = document.querySelectorAll('td.value-cell[data-col="' + colIndex + '"]');
+    cells.forEach(function (cell) {
+      var key = cell.getAttribute('data-spec-key');
+      var raw = specMap[key];
+      cell.innerHTML = '';
+      var node = renderValueCell(key, raw, productType);
+      cell.appendChild(node);
+    });
   }
 
-  function restoreVendor(id) {
-    removedVendors = removedVendors.filter(function (x) {
-      return x !== id;
-    });
-    activeVendors.add(id);
-    render();
-  }
-
-  function render() {
-    renderVendorChips();
-    renderSpecChips();
-    renderMeta();
-    renderTable();
-    document.getElementById('footer-right').textContent = new Date().toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
-    });
+  function setPopoverPosition(popover, anchorBtn) {
+    var rect = anchorBtn.getBoundingClientRect();
+    var gutter = 8;
+    popover.style.top = rect.bottom + gutter + 'px';
+    var left = rect.left;
+    var maxLeft = window.innerWidth - popover.offsetWidth - 16;
+    if (left > maxLeft) left = Math.max(16, maxLeft);
+    popover.style.left = left + 'px';
   }
 
   function init() {
-    loadData();
-    activeVendors = new Set(VENDORS.map(function (v) {
-      return v.id;
-    }));
-    removedVendors = [];
-    activeSpecs = new Set(SPECS);
-    render();
+    var data = window.VPC_COMPARISON_DATA;
+    if (
+      !data ||
+      !data.specRows ||
+      !data.vendors ||
+      !data.specs
+    ) {
+      throw new Error('VPC_COMPARISON_DATA missing or invalid (see data.js).');
+    }
+
+    var tbody = document.querySelector('[data-spec-body]');
+    if (!tbody) return;
+
+    data.specRows.forEach(function (row) {
+      var tr = document.createElement('tr');
+      var tdLabel = document.createElement('th');
+      tdLabel.className = 'spec-label-cell';
+      tdLabel.scope = 'row';
+      tdLabel.textContent = row.label;
+      tr.appendChild(tdLabel);
+      for (var c = 0; c < 3; c++) {
+        var td = document.createElement('td');
+        td.className = 'value-cell';
+        td.setAttribute('data-col', String(c));
+        td.setAttribute('data-spec-key', row.key);
+        tr.appendChild(td);
+      }
+      tbody.appendChild(tr);
+    });
+
+    var selects = document.querySelectorAll('[data-product-select]');
+    selects.forEach(function (sel) {
+      buildProductSelect(sel, data);
+    });
+
+    var hdtInfo = getHdtInfo(data);
+    var sharedPopover = document.getElementById('vpc-hdt-popover');
+    var openTrigger = null;
+
+    function closePopover() {
+      if (!sharedPopover) return;
+      sharedPopover.hidden = true;
+      sharedPopover.innerHTML = '';
+      if (openTrigger) {
+        openTrigger.setAttribute('aria-expanded', 'false');
+        openTrigger = null;
+      }
+    }
+
+    function openPopover(anchorBtn) {
+      if (!sharedPopover || !hdtInfo) return;
+      sharedPopover.innerHTML = '';
+      var p = document.createElement('p');
+      p.className = 'popover-body';
+      p.textContent = hdtInfo;
+      sharedPopover.appendChild(p);
+      sharedPopover.hidden = false;
+      window.requestAnimationFrame(function () {
+        setPopoverPosition(sharedPopover, anchorBtn);
+        window.requestAnimationFrame(function () {
+          setPopoverPosition(sharedPopover, anchorBtn);
+        });
+      });
+      if (openTrigger && openTrigger !== anchorBtn) {
+        openTrigger.setAttribute('aria-expanded', 'false');
+      }
+      openTrigger = anchorBtn;
+      anchorBtn.setAttribute('aria-expanded', 'true');
+    }
+
+    function togglePopover(anchorBtn) {
+      if (!hdtInfo) return;
+      var isOpen = openTrigger === anchorBtn && !sharedPopover.hidden;
+      if (isOpen) {
+        closePopover();
+      } else {
+        openPopover(anchorBtn);
+      }
+    }
+
+    function syncColumnInfoTrigger(colIndex) {
+      if (!hdtInfo) return;
+      var btn = document.querySelector('[data-info-trigger="' + colIndex + '"]');
+      var sel = document.querySelector('[data-product-select="' + colIndex + '"]');
+      if (!btn || !sel) return;
+      var pid = sel.value;
+      if (!pid) {
+        if (openTrigger === btn) closePopover();
+        btn.setAttribute('hidden', '');
+        return;
+      }
+      var ctx = findProductContext(data, pid);
+      var show = ctx && ctx.vendor.name === 'HDT';
+      if (show) {
+        btn.removeAttribute('hidden');
+      } else {
+        if (openTrigger === btn) closePopover();
+        btn.setAttribute('hidden', '');
+      }
+    }
+
+    if (hdtInfo) {
+      document.querySelectorAll('[data-info-trigger]').forEach(function (btn) {
+        btn.addEventListener('click', function (ev) {
+          ev.preventDefault();
+          togglePopover(btn);
+          if (!sharedPopover.hidden) {
+            window.requestAnimationFrame(function () {
+              setPopoverPosition(sharedPopover, btn);
+            });
+          }
+        });
+      });
+
+      document.addEventListener(
+        'mousedown',
+        function (ev) {
+          if (sharedPopover.hidden) return;
+          var t = ev.target;
+          if (sharedPopover.contains(t)) return;
+          if (t && t.closest && t.closest('[data-info-trigger]')) return;
+          closePopover();
+        },
+        true
+      );
+
+      window.addEventListener('resize', function () {
+        if (!sharedPopover.hidden && openTrigger) {
+          setPopoverPosition(sharedPopover, openTrigger);
+        }
+      });
+    }
+
+    selects.forEach(function (sel) {
+      sel.addEventListener('change', function () {
+        var col = sel.getAttribute('data-product-select');
+        var idx = parseInt(col, 10);
+        var pid = sel.value;
+        updateSelectSelectionClass(sel);
+        if (!pid) {
+          clearColumn(idx);
+        } else {
+          fillColumn(idx, pid, data);
+        }
+        syncColumnInfoTrigger(idx);
+      });
+    });
+
+    for (var ci = 0; ci < 3; ci++) {
+      syncColumnInfoTrigger(ci);
+    }
   }
 
   if (document.readyState === 'loading') {
