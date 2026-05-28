@@ -32,4 +32,4 @@ Decisions made during planning that shaped v1. Captured here so the trail is pre
 
 - **Hybrid hover/click popover:** Click-only for v1.
 
-- **Flat dropdown alternative:** Current dropdown groups products under vendor optgroup headers. A flat version ("HDT — Base-X 305" as full line items, no grouping) was considered. If the team prefers it after seeing v1, it's a small isolated change in app.js.
+- **Flat dropdown (adopted in v1):** Product picker uses a flat "Vendor — Product" list; optgroup headers were removed in favor of prefix-based grouping in the option text.

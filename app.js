@@ -86,6 +86,12 @@
     cells.forEach(function (cell) {
       cell.innerHTML = '';
     });
+    var logoImg = document.querySelector('[data-vendor-logo="' + colIndex + '"]');
+    if (logoImg) {
+      logoImg.setAttribute('hidden', '');
+      logoImg.src = '';
+      logoImg.alt = '';
+    }
   }
 
   function fillColumn(colIndex, productId, data) {
@@ -101,6 +107,19 @@
       var node = renderValueCell(key, raw, productType);
       cell.appendChild(node);
     });
+
+    var logoImg = document.querySelector('[data-vendor-logo="' + colIndex + '"]');
+    if (logoImg) {
+      if (ctx && ctx.vendor.logo) {
+        logoImg.src = ctx.vendor.logo;
+        logoImg.alt = ctx.vendor.name;
+        logoImg.removeAttribute('hidden');
+      } else {
+        logoImg.setAttribute('hidden', '');
+        logoImg.src = '';
+        logoImg.alt = '';
+      }
+    }
   }
 
   function setPopoverPosition(popover, anchorBtn) {

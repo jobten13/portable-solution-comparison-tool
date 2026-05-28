@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VPC Comparison Tool — Quickstart</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --text: #1a1a18;
+      --muted: #5c5c56;
+      --border: #e4e4df;
+      --bg: #fafaf8;
+      --surface: #fff;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "DM Sans", system-ui, sans-serif;
+      font-size: 11pt;
+      line-height: 1.5;
+      color: var(--text);
+      background: var(--bg);
+    }
+    .doc {
+      max-width: 42rem;
+      margin: 0 auto;
+      padding: 2rem 2.25rem 3rem;
+      background: var(--surface);
+    }
+    h1 {
+      margin: 0 0 0.25rem;
+      font-size: 1.5rem;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+    }
+    .meta {
+      margin: 0 0 1.75rem;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+    h2 {
+      margin: 1.75rem 0 0.65rem;
+      font-size: 1.05rem;
+      font-weight: 600;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 0.35rem;
+    }
+    p { margin: 0.5rem 0; }
+    ol, ul { margin: 0.5rem 0; padding-left: 1.35rem; }
+    li { margin: 0.35rem 0; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 0.75rem 0 1rem;
+      font-size: 0.92rem;
+    }
+    th, td {
+      text-align: left;
+      vertical-align: top;
+      padding: 0.45rem 0.6rem;
+      border: 1px solid var(--border);
+    }
+    th {
+      font-weight: 600;
+      background: var(--bg);
+    }
+    code, pre {
+      font-family: ui-monospace, "SF Mono", Menlo, monospace;
+      font-size: 0.88em;
+    }
+    pre {
+      margin: 0.65rem 0;
+      padding: 0.75rem 1rem;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      overflow-x: auto;
+      white-space: pre-wrap;
+    }
+    .links {
+      margin-top: 1.5rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.92rem;
+      color: var(--muted);
+    }
+    .links a { color: var(--text); }
+    @media print {
+      body { background: #fff; }
+      .doc {
+        max-width: none;
+        padding: 0;
+        box-shadow: none;
+      }
+      h2 { break-after: avoid; }
+      table, pre { break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+  <article class="doc">
+    <h1>VPC Comparison Tool — Quickstart</h1>
+    <p class="meta"><strong>Version 1.0.0</strong> · flat-table v1</p>
+
+    <h2>Run the tool (30 seconds)</h2>
+    <ol>
+      <li>Clone or open this project folder.</li>
+      <li>Open <strong>index.html</strong> in Chrome, Safari, or Edge (desktop).
+        <ul>
+          <li>Double-click the file, or</li>
+          <li>From the project folder: <code>python3 -m http.server 8080</code> then visit <code>http://localhost:8080/</code></li>
+        </ul>
+      </li>
+      <li>In each of the <strong>three columns</strong>, choose a product from the dropdown.</li>
+      <li>Compare spec rows side by side. Pick <strong>Select a product ▾</strong> again to clear a column.</li>
+    </ol>
+    <p>No install, no build, no database.</p>
+
+    <h2>Using the UI</h2>
+    <table>
+      <thead>
+        <tr><th>Action</th><th>Result</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Choose a product</td>
+          <td>That column fills with spec values; dropdown shows <strong>Vendor — Product</strong> in bold; vendor logo appears below the dropdown</td>
+        </tr>
+        <tr>
+          <td>Choose <strong>Select a product ▾</strong></td>
+          <td>Column clears (empty cells, no TBD); logo hides</td>
+        </tr>
+        <tr>
+          <td>Same product in two columns</td>
+          <td>Allowed</td>
+        </tr>
+        <tr>
+          <td>HDT product selected</td>
+          <td>ⓘ appears beside the vendor logo; click for connector/shelter note</td>
+        </tr>
+        <tr>
+          <td>Missing data in source</td>
+          <td><strong>TBD</strong> pill in that cell</td>
+        </tr>
+        <tr>
+          <td>Connector + bed capacity blank</td>
+          <td><strong>N/A</strong> for bed capacity</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>Update product data</h2>
+    <p><strong>File:</strong> <code>data.js</code> only.</p>
+    <p><strong>Example — change a value</strong></p>
+    <p>Find the product id under <code>specs</code>, then the spec key:</p>
+    <pre>"dlx-x24": {
+  wind: "65 mph sustained, 75 mph gusts",
+  // ...
+}</pre>
+    <p>Use <code>null</code> for unknown values (shows <strong>TBD</strong>).</p>
+    <p><strong>Example — add a product</strong></p>
+    <ol>
+      <li>Under the vendor in <code>vendors</code>, add to <code>products</code>:<br>
+        <code>{ id: "dlx-new", name: "New Model", type: "shelter" }</code></li>
+      <li>Under <code>specs</code>, add <code>"dlx-new": { bedCapacity: null, extDims: null, ... }</code> with every key from <code>specRows</code>.</li>
+      <li>Refresh the browser.</li>
+    </ol>
+    <p><strong>Example — add a vendor</strong></p>
+    <ol>
+      <li>Add a vendor object to <code>vendors</code> with <code>name</code>, <code>logo</code>, and <code>products</code>:<br>
+        <code>{ name: "Acme", logo: "logos/acme.png", products: [...] }</code></li>
+      <li>Drop the logo image (PNG recommended) into the <code>logos/</code> folder using the exact filename referenced above.</li>
+      <li>Add spec entries under <code>specs</code> for each new product id.</li>
+      <li>Refresh the browser.</li>
+    </ol>
+    <p><strong>Labels</strong> for rows are in <code>specRows</code> (e.g. <code>ground</code> → “Recommended ground surface”).</p>
+
+    <h2>What not to edit for routine updates</h2>
+    <ul>
+      <li><code>app.js</code> — behavior (dropdowns, TBD/N/A rules, HDT popover, logo wiring)</li>
+      <li><code>index.html</code> / <code>styles.css</code> — layout and look</li>
+      <li><code>logos/</code> — vendor logo images; add files here when adding a new vendor, otherwise leave as-is</li>
+      <li><code>Reference Material/</code> — local source docs; not loaded by the app</li>
+    </ul>
+
+    <p class="links">
+      More detail: <a href="README.md">README.md</a> ·
+      <a href="DESIGN_DECISIONS.md">DESIGN_DECISIONS.md</a> ·
+      <a href="VERSION">VERSION</a> ·
+      Open the tool: <a href="index.html">index.html</a>
+    </p>
+  </article>
+</body>
+</html>
