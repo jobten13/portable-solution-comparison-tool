@@ -1,6 +1,6 @@
 # VPC Comparison Tool
 
-**Version:** 1.0.0 (flat-table v1)
+**Version:** 1.0.0
 
 Desktop-only, side-by-side comparison of portable shelter products from five vendors. Three fixed columns; each column has a dropdown to pick a product. Spec values are plain text from source—no sorting, filtering, or unit conversion.
 
@@ -13,7 +13,10 @@ Open `index.html` in a browser (double-click or any static file server). No buil
 - **Flat-table UI:** three product columns, one spec label column, ten specification rows.
 - **Product picker:** flat list of options labeled `Vendor — Product` (e.g. `DLX — X-24`). Re-select **Select a product ▾** to clear a column.
 - **Cell display:** string values as-is; `null` → **TBD** pill; bed capacity on **connector** products → **N/A**.
-- **HDT note:** ⓘ appears only when an HDT product is selected in that column (click to open/close).
+- **Vendor logos:** each vendor's logo appears below the column dropdown when a product is selected.
+- **Sticky header:** the dropdown/logo row pins to the top of the viewport on scroll.
+- **HDT note:** ⓘ appears beside the vendor logo only when an HDT product is selected (click to open/close).
+- **Untested products:** four DLX products not independently tested by UC Davis show an asterisk (`*`) in the dropdown; a footnote appears below the table when any such product is selected.
 - **Scope:** vestibules and multi-bed configuration rows are out of scope for v1 (see [DESIGN_DECISIONS.md](DESIGN_DECISIONS.md)).
 
 ## File roles
@@ -44,8 +47,13 @@ Expose one object on `window.VPC_COMPARISON_DATA`:
 **Vendor** (optional fields):
 
 - `name` — display name (used in dropdown and HDT check).
+- `logo` — path to the vendor’s logo image (e.g. `logos/dlx.png`); shown below the dropdown when selected.
 - `products` — `{ id, name, type }` where `type` is `shelter` or `connector`.
 - `hasInfoPopover`, `infoText` — HDT-only; drives the ⓘ popover when that vendor’s product is selected.
+
+**Product** (optional fields):
+
+- `tested: false` — marks the product as not independently tested by UC Davis. Appends `*` to the dropdown label and shows a footnote below the table.
 
 **Product ids** in `specs` must match `products[].id`. Missing or `null` values render as **TBD** (except bed capacity on connectors → **N/A**).
 

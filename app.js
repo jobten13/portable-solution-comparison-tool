@@ -28,7 +28,9 @@
   }
 
   function flatOptionLabel(vendor, product) {
-    return vendor.name + ' ' + EM_DASH + ' ' + product.name;
+    var label = vendor.name + ' ' + EM_DASH + ' ' + product.name;
+    if (product.tested === false) label += ' *';
+    return label;
   }
 
   function updateSelectSelectionClass(selectEl) {
@@ -213,6 +215,26 @@
       }
     }
 
+    function syncUntestedFootnote() {
+      var footnote = document.querySelector('[data-untested-footnote]');
+      if (!footnote) return;
+      var hasUntested = false;
+      for (var i = 0; i < 3; i++) {
+        var sel = document.querySelector('[data-product-select="' + i + '"]');
+        if (!sel || !sel.value) continue;
+        var ctx = findProductContext(data, sel.value);
+        if (ctx && ctx.product.tested === false) {
+          hasUntested = true;
+          break;
+        }
+      }
+      if (hasUntested) {
+        footnote.removeAttribute('hidden');
+      } else {
+        footnote.setAttribute('hidden', '');
+      }
+    }
+
     function syncColumnInfoTrigger(colIndex) {
       if (!hdtInfo) return;
       var btn = document.querySelector('[data-info-trigger="' + colIndex + '"]');
@@ -278,12 +300,14 @@
           fillColumn(idx, pid, data);
         }
         syncColumnInfoTrigger(idx);
+        syncUntestedFootnote();
       });
     });
 
     for (var ci = 0; ci < 3; ci++) {
       syncColumnInfoTrigger(ci);
     }
+    syncUntestedFootnote();
   }
 
   if (document.readyState === 'loading') {

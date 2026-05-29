@@ -273,3 +273,15 @@ body {
   color: var(--text);
   line-height: 1.5;
 }
+
+.footnote {
+  max-width: 1100px;
+  margin: 0.65rem auto 0;
+  padding: 0 0.875rem;
+  font-family: "DM Sans", system-ui, sans-serif;
+  font-size: 0.8rem;
+  font-weight: 400;
+  color: var(--text-muted);
+  text-align: left;
+  line-height: 1.5;
+}

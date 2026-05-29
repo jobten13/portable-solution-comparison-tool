@@ -18,9 +18,11 @@ Decisions made during planning that shaped v1. Captured here so the trail is pre
 
 8. **Hard separation from the VPC Mapping Tool.** Separate repo, separate files, no shared code or data. Shared *facts* (a product's real-world dimensions) are fine — they're just reality.
 
-9. **Bed capacity blank in v1.** All bedCapacity values are null (renders as TBD pill for shelters, N/A for connectors). Will be populated once the team finalizes operational numbers per product.
+9. **Bed capacity populated in v1.** All bedCapacity values are now populated strings. Shelter products show a numeric value or range; connector products with null bedCapacity render as N/A via the type-based rule. GK-20 is typed as a shelter but its bedCapacity is set to the string "N/A" because it serves an ancillary/connector role rather than patient care.
 
 10. **Dimensions use feet/inches marks.** All External Length × Width values use `'` and `"` marks (e.g., `20' × 32.5'`, `18'7" × 33'11"`). Chosen over worded "ft / in" for compactness and over decimal feet to preserve source fidelity. Tool is faithful to source — no conversions or normalizations.
+
+11. **Untested products marked with asterisk.** Four DLX products (ASAP18, X-16, X-24SC, X-40) were added to the tool from the Vendor Product Catalog but were not independently tested by UC Davis during IMPACTS project events or exercises. These products display an asterisk (*) after their name in the dropdown and a contextual footnote appears below the table only when one of these products is selected. This convention should apply to any future untested products from any vendor.
 
 ## Parked / future work
 
