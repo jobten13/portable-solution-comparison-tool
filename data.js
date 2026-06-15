@@ -9,7 +9,7 @@
     specRows: [
       { key: 'bedCapacity', label: 'Bed Capacity' },
       { key: 'extDims', label: 'External Footprint' },
-      { key: 'intDims', label: 'Interior floor space dimensions' },
+      { key: 'intDims', label: 'Internal Floorspace' },
       { key: 'wind', label: 'Wind resistance rating' },
       { key: 'snow', label: 'Snow load' },
       { key: 'fire', label: 'Fire Resistance Rating' },
@@ -184,7 +184,7 @@
       },
       'hdt-305': {
         bedCapacity: '8',
-        extDims: "450 sq ft (18' × 25')",
+        extDims: "525 sq ft (21' × 25')",
         intDims: '450 sq ft',
         wind: '55 mph constant and 65 mph gusts',
         snow: '10 lbs per sq ft',
