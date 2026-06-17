@@ -92,7 +92,7 @@ body {
 }
 
 .col-head {
-  width: 27.33%;
+  width: 16.4%;
   vertical-align: bottom;
   text-align: center;
   font-weight: 400;
@@ -138,8 +138,8 @@ body {
 
 .product-select {
   display: block;
-  min-width: 11rem;
-  max-width: min(100%, 16rem);
+  width: 100%;
+  max-width: 100%;
   margin: 0 auto;
   font-family: "DM Sans", system-ui, sans-serif;
   font-size: 0.875rem;

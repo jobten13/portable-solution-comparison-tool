@@ -155,7 +155,7 @@
       tdLabel.scope = 'row';
       tdLabel.textContent = row.label;
       tr.appendChild(tdLabel);
-      for (var c = 0; c < 3; c++) {
+      for (var c = 0; c < 5; c++) {
         var td = document.createElement('td');
         td.className = 'value-cell';
         td.setAttribute('data-col', String(c));
@@ -219,7 +219,7 @@
       var footnote = document.querySelector('[data-untested-footnote]');
       if (!footnote) return;
       var hasUntested = false;
-      for (var i = 0; i < 3; i++) {
+      for (var i = 0; i < 5; i++) {
         var sel = document.querySelector('[data-product-select="' + i + '"]');
         if (!sel || !sel.value) continue;
         var ctx = findProductContext(data, sel.value);
@@ -304,7 +304,7 @@
       });
     });
 
-    for (var ci = 0; ci < 3; ci++) {
+    for (var ci = 0; ci < 5; ci++) {
       syncColumnInfoTrigger(ci);
     }
     syncUntestedFootnote();
