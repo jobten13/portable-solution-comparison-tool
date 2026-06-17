@@ -137,6 +137,46 @@
     popover.style.left = left + 'px';
   }
 
+  function getDisplayRows(specRows, pinnedRowKeys) {
+    var pinnedSet = {};
+    var rowByKey = {};
+    var i;
+    for (i = 0; i < pinnedRowKeys.length; i++) {
+      pinnedSet[pinnedRowKeys[i]] = true;
+    }
+    for (i = 0; i < specRows.length; i++) {
+      rowByKey[specRows[i].key] = specRows[i];
+    }
+    var display = [];
+    for (i = 0; i < pinnedRowKeys.length; i++) {
+      if (rowByKey[pinnedRowKeys[i]]) {
+        display.push(rowByKey[pinnedRowKeys[i]]);
+      }
+    }
+    for (i = 0; i < specRows.length; i++) {
+      if (!pinnedSet[specRows[i].key]) {
+        display.push(specRows[i]);
+      }
+    }
+    return display;
+  }
+
+  function createPinSvg() {
+    var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.setAttribute('viewBox', '0 0 24 24');
+    svg.setAttribute('width', '14');
+    svg.setAttribute('height', '14');
+    svg.setAttribute('aria-hidden', 'true');
+    svg.setAttribute('class', 'pin-icon');
+    var path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    path.setAttribute(
+      'd',
+      'M16 12V4h1V2H7v2h1v8l-2 2v2h5.2v6h1.6v-6H18v-2l-2-2z'
+    );
+    svg.appendChild(path);
+    return svg;
+  }
+
   function init() {
     var data = window.VPC_COMPARISON_DATA;
     if (
@@ -151,22 +191,75 @@
     var tbody = document.querySelector('[data-spec-body]');
     if (!tbody) return;
 
-    data.specRows.forEach(function (row) {
-      var tr = document.createElement('tr');
-      var tdLabel = document.createElement('th');
-      tdLabel.className = 'spec-label-cell';
-      tdLabel.scope = 'row';
-      tdLabel.textContent = row.label;
-      tr.appendChild(tdLabel);
-      for (var c = 0; c < 5; c++) {
-        var td = document.createElement('td');
-        td.className = 'value-cell';
-        td.setAttribute('data-col', String(c));
-        td.setAttribute('data-spec-key', row.key);
-        tr.appendChild(td);
+    var pinnedRowKeys = [];
+
+    function refillAllColumns() {
+      for (var col = 0; col < 5; col++) {
+        var sel = document.querySelector('[data-product-select="' + col + '"]');
+        if (sel && sel.value) {
+          fillColumn(col, sel.value, data);
+        }
       }
-      tbody.appendChild(tr);
-    });
+    }
+
+    function togglePin(specKey) {
+      var idx = pinnedRowKeys.indexOf(specKey);
+      if (idx === -1) {
+        pinnedRowKeys.push(specKey);
+      } else {
+        pinnedRowKeys.splice(idx, 1);
+      }
+      renderSpecBody();
+      refillAllColumns();
+    }
+
+    function renderSpecBody() {
+      tbody.innerHTML = '';
+      var displayRows = getDisplayRows(data.specRows, pinnedRowKeys);
+      displayRows.forEach(function (row) {
+        var isPinned = pinnedRowKeys.indexOf(row.key) !== -1;
+        var tr = document.createElement('tr');
+        var tdLabel = document.createElement('th');
+        tdLabel.className = 'spec-label-cell';
+        tdLabel.scope = 'row';
+
+        var inner = document.createElement('div');
+        inner.className = 'spec-label-inner';
+
+        var pinBtn = document.createElement('button');
+        pinBtn.type = 'button';
+        pinBtn.className = 'pin-trigger' + (isPinned ? ' is-pinned' : '');
+        pinBtn.setAttribute('data-pin-trigger', '');
+        pinBtn.setAttribute('data-spec-key', row.key);
+        pinBtn.setAttribute('aria-pressed', isPinned ? 'true' : 'false');
+        pinBtn.setAttribute('aria-label', isPinned ? 'Unpin row' : 'Pin row');
+        pinBtn.appendChild(createPinSvg());
+        pinBtn.addEventListener('click', function (ev) {
+          ev.preventDefault();
+          togglePin(row.key);
+        });
+
+        var labelSpan = document.createElement('span');
+        labelSpan.className = 'spec-label-text';
+        labelSpan.textContent = row.label;
+
+        inner.appendChild(pinBtn);
+        inner.appendChild(labelSpan);
+        tdLabel.appendChild(inner);
+        tr.appendChild(tdLabel);
+
+        for (var c = 0; c < 5; c++) {
+          var td = document.createElement('td');
+          td.className = 'value-cell';
+          td.setAttribute('data-col', String(c));
+          td.setAttribute('data-spec-key', row.key);
+          tr.appendChild(td);
+        }
+        tbody.appendChild(tr);
+      });
+    }
+
+    renderSpecBody();
 
     var selects = document.querySelectorAll('[data-product-select]');
     selects.forEach(function (sel) {

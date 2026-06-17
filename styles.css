@@ -218,6 +218,67 @@ body {
   width: 18%;
 }
 
+.spec-label-inner {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.4rem;
+}
+
+.spec-label-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.pin-trigger {
+  flex-shrink: 0;
+  width: 1.75rem;
+  height: 1.75rem;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--accent-soft);
+  color: var(--accent);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pin-trigger svg {
+  display: block;
+}
+
+.pin-trigger svg path {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.75;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+
+.pin-trigger.is-pinned {
+  background: var(--accent);
+  color: var(--surface);
+}
+
+.pin-trigger.is-pinned svg path {
+  fill: currentColor;
+  stroke: currentColor;
+}
+
+.pin-trigger:hover {
+  background: #dde0e5;
+}
+
+.pin-trigger.is-pinned:hover {
+  background: #5a6270;
+}
+
+.pin-trigger:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
 .value-cell {
   padding: 0.71875rem 0.65rem;
   font-family: "DM Mono", ui-monospace, monospace;
