@@ -225,7 +225,7 @@
       },
       'ws-gk1935': {
         bedCapacity: '10',
-        extDims: '~630 sq ft',
+        extDims: '~630 sq ft (Clipped-corner rectangle)',
         intDims: '~570 sq ft',
         wind: '55 mph w/ gusts to 65 mph',
         snow: '10 lbs/sq ft for 12 hours',
@@ -262,7 +262,7 @@
       },
       'zumro-quad': {
         bedCapacity: null,
-        extDims: '~454 sq ft (plus shape)',
+        extDims: '~570 sq ft (4-way connector)',
         intDims: '454 sq ft',
         wind: '55 MPH',
         snow: '3.44 lbs. per square foot STATIC load',
