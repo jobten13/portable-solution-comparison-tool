@@ -114,15 +114,18 @@ body {
 .logo-trigger-wrap {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 0.4rem;
   margin-top: 10px;
+  width: 100%;
 }
 
 .vendor-logo {
   display: block;
-  max-height: 50px;
-  width: auto;
+  width: 8rem;
+  height: 2.5rem;
   object-fit: contain;
+  object-position: center;
 }
 
 .select-anchor {
