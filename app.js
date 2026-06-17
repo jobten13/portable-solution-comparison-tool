@@ -28,7 +28,7 @@
   }
 
   function flatOptionLabel(vendor, product) {
-    var label = vendor.name + ' ' + EM_DASH + ' ' + product.name;
+    var label = product.name;
     if (product.tested === false) label += ' *';
     return label;
   }
@@ -49,12 +49,15 @@
     selectEl.appendChild(first);
 
     data.vendors.forEach(function (vendor) {
+      var group = document.createElement('optgroup');
+      group.label = vendor.name;
       vendor.products.forEach(function (p) {
         var opt = document.createElement('option');
         opt.value = p.id;
         opt.textContent = flatOptionLabel(vendor, p);
-        selectEl.appendChild(opt);
+        group.appendChild(opt);
       });
+      selectEl.appendChild(group);
     });
     updateSelectSelectionClass(selectEl);
   }
