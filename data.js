@@ -43,12 +43,15 @@
       {
         name: 'HDT',
         logo: 'logos/hdt.png',
-        hasInfoPopover: true,
-        infoText:
-          'HDT does not produce a small connector. The 8D36 can serve a connector role, but is sized as a full shelter and is listed as such.',
         products: [
           { id: 'hdt-305', name: 'Base-X 305', type: 'shelter' },
-          { id: 'hdt-8d36', name: 'Base-X 8D36', type: 'shelter' },
+          {
+            id: 'hdt-8d36',
+            name: 'Base-X 8D36',
+            type: 'shelter',
+            infoText:
+              'HDT does not produce a small connector. The 8D36 can serve a connector role, but is sized as a full shelter and is listed as such.',
+          },
         ],
       },
       {

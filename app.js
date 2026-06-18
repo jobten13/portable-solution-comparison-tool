@@ -2,13 +2,16 @@
   'use strict';
 
   var EM_DASH = '\u2014';
+  var UNTESTED_POPOVER_TEXT =
+    'Not independently tested by UC Davis during IMPACTS project events or exercises.';
 
-  function getHdtInfo(data) {
-    for (var i = 0; i < data.vendors.length; i++) {
-      var v = data.vendors[i];
-      if (v.hasInfoPopover && v.infoText) {
-        return v.infoText;
-      }
+  function productInfoText(product) {
+    if (
+      product &&
+      typeof product.infoText === 'string' &&
+      product.infoText.length > 0
+    ) {
+      return product.infoText;
     }
     return null;
   }
@@ -266,7 +269,6 @@
       buildProductSelect(sel, data);
     });
 
-    var hdtInfo = getHdtInfo(data);
     var sharedPopover = document.getElementById('vpc-hdt-popover');
     var openTrigger = null;
 
@@ -280,12 +282,12 @@
       }
     }
 
-    function openPopover(anchorBtn) {
-      if (!sharedPopover || !hdtInfo) return;
+    function openPopover(anchorBtn, text) {
+      if (!sharedPopover || !text) return;
       sharedPopover.innerHTML = '';
       var p = document.createElement('p');
       p.className = 'popover-body';
-      p.textContent = hdtInfo;
+      p.textContent = text;
       sharedPopover.appendChild(p);
       sharedPopover.hidden = false;
       window.requestAnimationFrame(function () {
@@ -301,13 +303,13 @@
       anchorBtn.setAttribute('aria-expanded', 'true');
     }
 
-    function togglePopover(anchorBtn) {
-      if (!hdtInfo) return;
+    function togglePopover(anchorBtn, text) {
+      if (!text) return;
       var isOpen = openTrigger === anchorBtn && !sharedPopover.hidden;
       if (isOpen) {
         closePopover();
       } else {
-        openPopover(anchorBtn);
+        openPopover(anchorBtn, text);
       }
     }
 
@@ -331,32 +333,72 @@
       }
     }
 
-    function syncColumnInfoTrigger(colIndex) {
-      if (!hdtInfo) return;
-      var btn = document.querySelector('[data-info-trigger="' + colIndex + '"]');
+    function syncColumnHeaderIcons(colIndex) {
+      var infoBtn = document.querySelector('[data-info-trigger="' + colIndex + '"]');
+      var untestedBtn = document.querySelector(
+        '[data-untested-trigger="' + colIndex + '"]'
+      );
       var sel = document.querySelector('[data-product-select="' + colIndex + '"]');
-      if (!btn || !sel) return;
+      if (!infoBtn || !untestedBtn || !sel) return;
       var pid = sel.value;
       if (!pid) {
-        if (openTrigger === btn) closePopover();
-        btn.setAttribute('hidden', '');
+        if (openTrigger === infoBtn || openTrigger === untestedBtn) {
+          closePopover();
+        }
+        infoBtn.setAttribute('hidden', '');
+        untestedBtn.setAttribute('hidden', '');
         return;
       }
       var ctx = findProductContext(data, pid);
-      var show = ctx && ctx.vendor.name === 'HDT';
-      if (show) {
-        btn.removeAttribute('hidden');
+      if (!ctx) {
+        if (openTrigger === infoBtn || openTrigger === untestedBtn) {
+          closePopover();
+        }
+        infoBtn.setAttribute('hidden', '');
+        untestedBtn.setAttribute('hidden', '');
+        return;
+      }
+      var info = productInfoText(ctx.product);
+      if (info) {
+        if (openTrigger === untestedBtn) closePopover();
+        infoBtn.removeAttribute('hidden');
+        untestedBtn.setAttribute('hidden', '');
+      } else if (ctx.product.tested === false) {
+        if (openTrigger === infoBtn) closePopover();
+        infoBtn.setAttribute('hidden', '');
+        untestedBtn.removeAttribute('hidden');
       } else {
-        if (openTrigger === btn) closePopover();
-        btn.setAttribute('hidden', '');
+        if (openTrigger === infoBtn || openTrigger === untestedBtn) {
+          closePopover();
+        }
+        infoBtn.setAttribute('hidden', '');
+        untestedBtn.setAttribute('hidden', '');
       }
     }
 
-    if (hdtInfo) {
+    if (sharedPopover) {
       document.querySelectorAll('[data-info-trigger]').forEach(function (btn) {
         btn.addEventListener('click', function (ev) {
           ev.preventDefault();
-          togglePopover(btn);
+          var col = btn.getAttribute('data-info-trigger');
+          var sel = document.querySelector('[data-product-select="' + col + '"]');
+          if (!sel || !sel.value) return;
+          var ctx = findProductContext(data, sel.value);
+          var text = ctx ? productInfoText(ctx.product) : null;
+          if (!text) return;
+          togglePopover(btn, text);
+          if (!sharedPopover.hidden) {
+            window.requestAnimationFrame(function () {
+              setPopoverPosition(sharedPopover, btn);
+            });
+          }
+        });
+      });
+
+      document.querySelectorAll('[data-untested-trigger]').forEach(function (btn) {
+        btn.addEventListener('click', function (ev) {
+          ev.preventDefault();
+          togglePopover(btn, UNTESTED_POPOVER_TEXT);
           if (!sharedPopover.hidden) {
             window.requestAnimationFrame(function () {
               setPopoverPosition(sharedPopover, btn);
@@ -372,6 +414,7 @@
           var t = ev.target;
           if (sharedPopover.contains(t)) return;
           if (t && t.closest && t.closest('[data-info-trigger]')) return;
+          if (t && t.closest && t.closest('[data-untested-trigger]')) return;
           closePopover();
         },
         true
@@ -395,13 +438,13 @@
         } else {
           fillColumn(idx, pid, data);
         }
-        syncColumnInfoTrigger(idx);
+        syncColumnHeaderIcons(idx);
         syncUntestedFootnote();
       });
     });
 
     for (var ci = 0; ci < 5; ci++) {
-      syncColumnInfoTrigger(ci);
+      syncColumnHeaderIcons(ci);
     }
     syncUntestedFootnote();
   }
