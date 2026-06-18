@@ -94,7 +94,7 @@
     var logoImg = document.querySelector('[data-vendor-logo="' + colIndex + '"]');
     if (logoImg) {
       logoImg.setAttribute('hidden', '');
-      logoImg.src = '';
+      logoImg.removeAttribute('src');
       logoImg.alt = '';
     }
   }
@@ -121,7 +121,7 @@
         logoImg.removeAttribute('hidden');
       } else {
         logoImg.setAttribute('hidden', '');
-        logoImg.src = '';
+        logoImg.removeAttribute('src');
         logoImg.alt = '';
       }
     }
