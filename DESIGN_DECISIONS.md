@@ -1,4 +1,4 @@
-# VPC Comparison Tool — Design Decisions
+# Portable Solution Comparison Tool — Design Decisions
 
 Decisions made during planning that shaped v1. Captured here so the trail is preserved.
 

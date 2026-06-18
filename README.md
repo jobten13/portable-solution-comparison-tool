@@ -1,4 +1,4 @@
-# VPC Comparison Tool
+# Portable Solution Comparison Tool
 
 **Version:** 1.0.0
 

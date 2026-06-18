@@ -1,5 +1,5 @@
 /**
- * VPC Comparison Tool — data only.
+ * Portable Solution Comparison Tool — data only.
  * Exposes window.VPC_COMPARISON_DATA. Edit this file for routine data updates.
  */
 (function () {
