@@ -425,6 +425,17 @@
           setPopoverPosition(sharedPopover, openTrigger);
         }
       });
+
+      window.addEventListener(
+        'scroll',
+        function (ev) {
+          if (sharedPopover.hidden) return;
+          var t = ev.target;
+          if (t && sharedPopover.contains(t)) return;
+          closePopover();
+        },
+        { capture: true, passive: true }
+      );
     }
 
     selects.forEach(function (sel) {
