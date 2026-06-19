@@ -30,6 +30,142 @@
     return null;
   }
 
+  var FILTER_FIELD_KEYS = ['bedCapacity', 'extSqFt', 'intSqFt'];
+
+  function isFilterFieldExcluded(val) {
+    return !!(val && val.excluded === true);
+  }
+
+  function fieldPassesThreshold(filterVal, threshold) {
+    if (threshold === null || threshold === undefined || threshold === '') {
+      return true;
+    }
+    if (isFilterFieldExcluded(filterVal)) {
+      return false;
+    }
+    if (typeof filterVal === 'number') {
+      return filterVal >= threshold;
+    }
+    if (
+      filterVal &&
+      typeof filterVal.min === 'number' &&
+      typeof filterVal.max === 'number'
+    ) {
+      return filterVal.max >= threshold;
+    }
+    return false;
+  }
+
+  function productMatchesFilters(productId, data, thresholds) {
+    var spec = data.specs[productId];
+    if (!spec || !spec.filter) {
+      return false;
+    }
+    var filter = spec.filter;
+    var i;
+    for (i = 0; i < FILTER_FIELD_KEYS.length; i++) {
+      var key = FILTER_FIELD_KEYS[i];
+      if (!fieldPassesThreshold(filter[key], thresholds[key])) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  function isAnyFilterActive(thresholds) {
+    var i;
+    for (i = 0; i < FILTER_FIELD_KEYS.length; i++) {
+      var t = thresholds[FILTER_FIELD_KEYS[i]];
+      if (typeof t === 'number' && !isNaN(t)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  function addFilterBoundValue(bounds, val) {
+    if (bounds.min === null || val < bounds.min) {
+      bounds.min = val;
+    }
+    if (bounds.max === null || val > bounds.max) {
+      bounds.max = val;
+    }
+  }
+
+  function computeFilterBounds(data) {
+    var bounds = {
+      bedCapacity: { min: null, max: null },
+      extSqFt: { min: null, max: null },
+      intSqFt: { min: null, max: null },
+    };
+    var ids = Object.keys(data.specs);
+    var i;
+    var j;
+    for (i = 0; i < ids.length; i++) {
+      var filter = data.specs[ids[i]].filter;
+      if (!filter) continue;
+      var bed = filter.bedCapacity;
+      if (!isFilterFieldExcluded(bed)) {
+        if (typeof bed === 'number') {
+          addFilterBoundValue(bounds.bedCapacity, bed);
+        } else if (bed && typeof bed.min === 'number' && typeof bed.max === 'number') {
+          addFilterBoundValue(bounds.bedCapacity, bed.min);
+          addFilterBoundValue(bounds.bedCapacity, bed.max);
+        }
+      }
+      for (j = 1; j < FILTER_FIELD_KEYS.length; j++) {
+        var sqKey = FILTER_FIELD_KEYS[j];
+        var sqVal = filter[sqKey];
+        if (!isFilterFieldExcluded(sqVal) && typeof sqVal === 'number') {
+          addFilterBoundValue(bounds[sqKey], sqVal);
+        }
+      }
+    }
+    return bounds;
+  }
+
+  function parseFilterInputEl(el) {
+    if (!el || el.value === '') return null;
+    var n = parseFloat(el.value);
+    if (isNaN(n)) return null;
+    return n;
+  }
+
+  function getThresholdsFromInputs(inputsByKey) {
+    return {
+      bedCapacity: parseFilterInputEl(inputsByKey.bedCapacity),
+      extSqFt: parseFilterInputEl(inputsByKey.extSqFt),
+      intSqFt: parseFilterInputEl(inputsByKey.intSqFt),
+    };
+  }
+
+  function syncSelectOptionDisabled(selectEl, data, thresholds) {
+    var options = selectEl.querySelectorAll('option');
+    var i;
+    if (!isAnyFilterActive(thresholds)) {
+      for (i = 0; i < options.length; i++) {
+        if (options[i].value) {
+          options[i].disabled = false;
+        }
+      }
+      return;
+    }
+    for (i = 0; i < options.length; i++) {
+      var opt = options[i];
+      if (!opt.value) continue;
+      opt.disabled = !productMatchesFilters(opt.value, data, thresholds);
+    }
+  }
+
+  function setFilterBarHeightCss() {
+    var bar = document.querySelector('[data-filter-bar]');
+    if (!bar) return;
+    document.documentElement.style.setProperty(
+      '--filter-bar-height',
+      bar.offsetHeight + 'px'
+    );
+  }
+
   function flatOptionLabel(vendor, product) {
     var label = product.name;
     if (product.tested === false) label += ' *';
@@ -269,6 +405,47 @@
       buildProductSelect(sel, data);
     });
 
+    var filterThresholds = { bedCapacity: null, extSqFt: null, intSqFt: null };
+    var filterBounds = computeFilterBounds(data);
+    var filterInputsByKey = {};
+    var filterInputEls = document.querySelectorAll('[data-filter-input]');
+    filterInputEls.forEach(function (el) {
+      filterInputsByKey[el.getAttribute('data-filter-input')] = el;
+    });
+
+    FILTER_FIELD_KEYS.forEach(function (key) {
+      var b = filterBounds[key];
+      var input = filterInputsByKey[key];
+      var hint = document.querySelector('[data-filter-hint="' + key + '"]');
+      if (input && b.min !== null && b.max !== null) {
+        input.min = String(b.min);
+        input.max = String(b.max);
+      }
+      if (hint && b.min !== null && b.max !== null) {
+        if (key === 'bedCapacity') {
+          hint.textContent = 'Range: ' + b.min + '\u2013' + b.max;
+        } else {
+          hint.textContent = b.min + '\u2013' + b.max + ' sq ft';
+        }
+      }
+    });
+
+    function applyFilterState() {
+      selects.forEach(function (sel) {
+        syncSelectOptionDisabled(sel, data, filterThresholds);
+      });
+    }
+
+    filterInputEls.forEach(function (el) {
+      el.addEventListener('input', function () {
+        filterThresholds = getThresholdsFromInputs(filterInputsByKey);
+        applyFilterState();
+      });
+    });
+
+    setFilterBarHeightCss();
+    applyFilterState();
+
     var sharedPopover = document.getElementById('vpc-hdt-popover');
     var openTrigger = null;
 
@@ -421,6 +598,7 @@
       );
 
       window.addEventListener('resize', function () {
+        setFilterBarHeightCss();
         if (!sharedPopover.hidden && openTrigger) {
           setPopoverPosition(sharedPopover, openTrigger);
         }
