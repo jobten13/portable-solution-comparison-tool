@@ -72,6 +72,13 @@
         ],
       },
     ],
+    // filter: structured values for the filtering feature (hand-authored per product).
+    //   bedCapacity: number | { min, max } | { excluded: true }
+    //   extSqFt:     number | { excluded: true }
+    //   intSqFt:     number | { excluded: true }
+    // Derive from the display strings: strip "~", take the leading sq ft; ranges use { min, max };
+    // N/A or no usable number → { excluded: true }.
+    // Rationale: see DESIGN_DECISIONS.md (filter semantics) — to be added in the docs pass.
     specs: {
       'blumed-2032': {
         bedCapacity: '10',
@@ -86,6 +93,11 @@
           'BLU-MED structures are designed and provide for extended erection of 10 years with a shelf life of 20 years',
         repair:
           '100 Setup/Strike Cycles – No System Failure. Each shelter includes (1) repair kit.',
+        filter: {
+          bedCapacity: 10,
+          extSqFt: 660,
+          intSqFt: 650,
+        },
       },
       'blumed-2039': {
         bedCapacity: '10',
@@ -100,6 +112,11 @@
           'BLU-MED structures are designed and provide for extended erection of 10 years with a shelf life of 20 years',
         repair:
           '100 Setup/Strike Cycles – No System Failure. Each shelter includes (1) repair kit.',
+        filter: {
+          bedCapacity: 10,
+          extSqFt: 780,
+          intSqFt: 780,
+        },
       },
       'dlx-asap18': {
         bedCapacity: '3',
@@ -112,6 +129,11 @@
         ground: 'Flat, dry ground, asphalt, or concrete.',
         lifespan: '10 years if properly maintained',
         repair: 'Vinyl repairs may be needed if damaged during use. Repair kit included.',
+        filter: {
+          bedCapacity: 3,
+          extSqFt: 288,
+          intSqFt: 288,
+        },
       },
       'dlx-x16': {
         bedCapacity: '6',
@@ -124,6 +146,11 @@
         ground: 'Flat, dry ground, asphalt, or concrete.',
         lifespan: '10 years if properly maintained',
         repair: 'Vinyl repairs may be needed if damaged during use. Repair kit included.',
+        filter: {
+          bedCapacity: 6,
+          extSqFt: 352,
+          intSqFt: 344,
+        },
       },
       'dlx-x24': {
         bedCapacity: '8',
@@ -136,6 +163,11 @@
         ground: 'Flat, dry ground, asphalt, or concrete.',
         lifespan: '10 years if properly maintained',
         repair: 'Vinyl repairs may be needed if damaged during use. Repair kit included.',
+        filter: {
+          bedCapacity: 8,
+          extSqFt: 528,
+          intSqFt: 516,
+        },
       },
       'dlx-x24sc': {
         bedCapacity: '6',
@@ -148,6 +180,11 @@
         ground: 'Flat, dry ground, asphalt, or concrete.',
         lifespan: '10 years if properly maintained',
         repair: 'Vinyl repairs may be needed if damaged during use. Repair kit included.',
+        filter: {
+          bedCapacity: 6,
+          extSqFt: 600,
+          intSqFt: 531,
+        },
       },
       'dlx-x32': {
         bedCapacity: '12',
@@ -160,6 +197,11 @@
         ground: 'Flat, dry ground, asphalt, or concrete.',
         lifespan: '10 years if properly maintained',
         repair: 'Vinyl repairs may be needed if damaged during use. Repair kit included.',
+        filter: {
+          bedCapacity: 12,
+          extSqFt: 704,
+          intSqFt: 688,
+        },
       },
       'dlx-x40': {
         bedCapacity: '14',
@@ -172,6 +214,11 @@
         ground: 'Flat, dry ground, asphalt, or concrete.',
         lifespan: '10 years if properly maintained',
         repair: 'Vinyl repairs may be needed if damaged during use. Repair kit included.',
+        filter: {
+          bedCapacity: 14,
+          extSqFt: 880,
+          intSqFt: 860,
+        },
       },
       'dlx-xhub': {
         bedCapacity: null,
@@ -184,6 +231,11 @@
         ground: 'Flat, dry ground, asphalt, or concrete.',
         lifespan: '10 years if properly maintained',
         repair: 'Vinyl repairs may be needed if damaged during use. Repair kit included.',
+        filter: {
+          bedCapacity: { excluded: true },
+          extSqFt: 484,
+          intSqFt: 484,
+        },
       },
       'hdt-305': {
         bedCapacity: '8',
@@ -198,6 +250,11 @@
         lifespan: '10+ years',
         repair:
           'Each shelter comes with repair kit for typical field repairs. Parts can be ordered as needed.',
+        filter: {
+          bedCapacity: 8,
+          extSqFt: 525,
+          intSqFt: 450,
+        },
       },
       'hdt-8d36': {
         bedCapacity: '18',
@@ -212,6 +269,11 @@
         lifespan: '10+ years with proper care & maintenance',
         repair:
           'Each shelter comes with repair kit for typical field repairs. Parts can be ordered as needed.',
+        filter: {
+          bedCapacity: 18,
+          extSqFt: 935,
+          intSqFt: 935,
+        },
       },
       'ws-gk20': {
         bedCapacity: 'N/A',
@@ -225,6 +287,11 @@
         lifespan: '10+ years with proper care & maintenance',
         repair:
           'Yearly inspection & maintenance – parts can be ordered individually as needed.',
+        filter: {
+          bedCapacity: { excluded: true },
+          extSqFt: 286,
+          intSqFt: 286,
+        },
       },
       'ws-gk1935': {
         bedCapacity: '10',
@@ -238,6 +305,11 @@
         lifespan: '10+ years with proper care & maintenance',
         repair:
           'Yearly inspection & maintenance – parts can be ordered individually as needed.',
+        filter: {
+          bedCapacity: 10,
+          extSqFt: 630,
+          intSqFt: 570,
+        },
       },
       'zumro-400': {
         bedCapacity: '6 to 8',
@@ -250,6 +322,11 @@
         ground: 'Hard & Level Preferred',
         lifespan: '15+ years with proper maintenance & care',
         repair: 'Annual Inspections & Maintenance as needed',
+        filter: {
+          bedCapacity: { min: 6, max: 8 },
+          extSqFt: 420,
+          intSqFt: 400,
+        },
       },
       'zumro-600': {
         bedCapacity: '10 to 12',
@@ -262,6 +339,11 @@
         ground: 'Hard & Level Preferred',
         lifespan: '15+ years with proper maintenance & care',
         repair: 'Annual Inspections & Maintenance as needed',
+        filter: {
+          bedCapacity: { min: 10, max: 12 },
+          extSqFt: 620,
+          intSqFt: 600,
+        },
       },
       'zumro-quad': {
         bedCapacity: null,
@@ -274,6 +356,11 @@
         ground: 'Hard & Level Preferred',
         lifespan: '15+ Years with proper maintenance & care',
         repair: 'Annual Inspections & Maintenance as needed. ZUMRO replacement parts available through sales rep, online or website',
+        filter: {
+          bedCapacity: { excluded: true },
+          extSqFt: 570,
+          intSqFt: 454,
+        },
       },
     },
   };
