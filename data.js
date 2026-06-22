@@ -171,7 +171,7 @@
       },
       'dlx-x24sc': {
         bedCapacity: '6',
-        extDims: "600 sq ft (24' × 25')",
+        extDims: "624 sq ft (24' × 26')",
         intDims: '531 sq ft',
         wind: '65 mph sustained, 75 mph gusts',
         snow: '10 lbs/sq ft',
@@ -182,7 +182,7 @@
         repair: 'Vinyl repairs may be needed if damaged during use. Repair kit included.',
         filter: {
           bedCapacity: 6,
-          extSqFt: 600,
+          extSqFt: 624,
           intSqFt: 531,
         },
       },
@@ -330,7 +330,7 @@
       },
       'zumro-600': {
         bedCapacity: '10 to 12',
-        extDims: "620 sq ft (31' × 20')",
+        extDims: "651 sq ft (31' × 21')",
         intDims: '600 sq ft',
         wind: '55 MPH',
         snow: '3.29 lbs. per square foot STATIC load',
@@ -341,7 +341,7 @@
         repair: 'Annual Inspections & Maintenance as needed',
         filter: {
           bedCapacity: { min: 10, max: 12 },
-          extSqFt: 620,
+          extSqFt: 651,
           intSqFt: 600,
         },
       },
