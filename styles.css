@@ -49,13 +49,6 @@ body {
   letter-spacing: -0.02em;
 }
 
-.page-subtitle {
-  margin: 0 auto;
-  max-width: 36rem;
-  font-size: 0.95rem;
-  color: var(--text-muted);
-}
-
 .main {
   padding: 1.25rem 0.75rem 3rem;
   max-width: none;

@@ -1,7 +1,6 @@
 (function () {
   'use strict';
 
-  var EM_DASH = '\u2014';
   var UNTESTED_POPOVER_TEXT =
     'Not independently tested by UC Davis during IMPACTS project events or exercises.';
 
@@ -197,7 +196,7 @@
     );
   }
 
-  function flatOptionLabel(vendor, product) {
+  function flatOptionLabel(product) {
     var label = product.name;
     if (product.tested === false) label += ' *';
     return label;
@@ -224,7 +223,7 @@
       vendor.products.forEach(function (p) {
         var opt = document.createElement('option');
         opt.value = p.id;
-        opt.textContent = flatOptionLabel(vendor, p);
+        opt.textContent = flatOptionLabel(p);
         group.appendChild(opt);
       });
       selectEl.appendChild(group);
@@ -467,7 +466,7 @@
     setFilterBarHeightCss();
     applyFilterState();
 
-    var sharedPopover = document.getElementById('vpc-hdt-popover');
+    var sharedPopover = document.getElementById('vpc-info-popover');
     var openTrigger = null;
 
     function closePopover() {
