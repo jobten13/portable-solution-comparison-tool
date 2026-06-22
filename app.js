@@ -118,6 +118,24 @@
     }
   }
 
+  function addFilterFieldToBounds(bounds, fieldKey, filterVal) {
+    if (isFilterFieldExcluded(filterVal)) {
+      return;
+    }
+    if (typeof filterVal === 'number') {
+      addFilterBoundValue(bounds[fieldKey], filterVal);
+      return;
+    }
+    if (
+      filterVal &&
+      typeof filterVal.min === 'number' &&
+      typeof filterVal.max === 'number'
+    ) {
+      addFilterBoundValue(bounds[fieldKey], filterVal.min);
+      addFilterBoundValue(bounds[fieldKey], filterVal.max);
+    }
+  }
+
   function computeFilterBounds(data) {
     var bounds = {
       bedCapacity: { min: null, max: null },
@@ -130,21 +148,8 @@
     for (i = 0; i < ids.length; i++) {
       var filter = data.specs[ids[i]].filter;
       if (!filter) continue;
-      var bed = filter.bedCapacity;
-      if (!isFilterFieldExcluded(bed)) {
-        if (typeof bed === 'number') {
-          addFilterBoundValue(bounds.bedCapacity, bed);
-        } else if (bed && typeof bed.min === 'number' && typeof bed.max === 'number') {
-          addFilterBoundValue(bounds.bedCapacity, bed.min);
-          addFilterBoundValue(bounds.bedCapacity, bed.max);
-        }
-      }
-      for (j = 1; j < FILTER_FIELD_KEYS.length; j++) {
-        var sqKey = FILTER_FIELD_KEYS[j];
-        var sqVal = filter[sqKey];
-        if (!isFilterFieldExcluded(sqVal) && typeof sqVal === 'number') {
-          addFilterBoundValue(bounds[sqKey], sqVal);
-        }
+      for (j = 0; j < FILTER_FIELD_KEYS.length; j++) {
+        addFilterFieldToBounds(bounds, FILTER_FIELD_KEYS[j], filter[FILTER_FIELD_KEYS[j]]);
       }
     }
     return bounds;
