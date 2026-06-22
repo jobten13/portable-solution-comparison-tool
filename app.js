@@ -30,28 +30,48 @@
     return null;
   }
 
-  var FILTER_FIELD_KEYS = ['bedCapacity', 'extSqFt', 'intSqFt'];
+  var FILTER_FIELD_DEFS = [
+    { key: 'bedCapacity', direction: 'min' },
+    { key: 'intSqFt', direction: 'min' },
+    { key: 'extSqFt', direction: 'max' },
+  ];
+
+  var FILTER_FIELD_KEYS = FILTER_FIELD_DEFS.map(function (d) {
+    return d.key;
+  });
+
+  var FILTER_FIELD_DIRECTION = {};
+  FILTER_FIELD_DEFS.forEach(function (d) {
+    FILTER_FIELD_DIRECTION[d.key] = d.direction;
+  });
+
+  function getFilterFieldDirection(fieldKey) {
+    return FILTER_FIELD_DIRECTION[fieldKey] || 'min';
+  }
 
   function isFilterFieldExcluded(val) {
     return !!(val && val.excluded === true);
   }
 
-  function fieldPassesThreshold(filterVal, threshold) {
+  function fieldPassesThreshold(filterVal, threshold, direction) {
     if (threshold === null || threshold === undefined || threshold === '') {
       return true;
     }
     if (isFilterFieldExcluded(filterVal)) {
       return false;
     }
+    var isMax = direction === 'max';
     if (typeof filterVal === 'number') {
-      return filterVal >= threshold;
+      return isMax ? filterVal <= threshold : filterVal >= threshold;
     }
     if (
       filterVal &&
       typeof filterVal.min === 'number' &&
       typeof filterVal.max === 'number'
     ) {
-      return filterVal.max >= threshold;
+      return isMax
+        ? filterVal.max <= threshold
+        : filterVal.max >= threshold;
     }
     return false;
   }
@@ -65,7 +85,13 @@
     var i;
     for (i = 0; i < FILTER_FIELD_KEYS.length; i++) {
       var key = FILTER_FIELD_KEYS[i];
-      if (!fieldPassesThreshold(filter[key], thresholds[key])) {
+      if (
+        !fieldPassesThreshold(
+          filter[key],
+          thresholds[key],
+          getFilterFieldDirection(key)
+        )
+      ) {
         return false;
       }
     }
@@ -339,6 +365,7 @@
           fillColumn(col, sel.value, data);
         }
       }
+      syncAllColumnGreyStates();
     }
 
     function togglePin(specKey) {
@@ -416,17 +443,9 @@
     FILTER_FIELD_KEYS.forEach(function (key) {
       var b = filterBounds[key];
       var input = filterInputsByKey[key];
-      var hint = document.querySelector('[data-filter-hint="' + key + '"]');
       if (input && b.min !== null && b.max !== null) {
         input.min = String(b.min);
         input.max = String(b.max);
-      }
-      if (hint && b.min !== null && b.max !== null) {
-        if (key === 'bedCapacity') {
-          hint.textContent = 'Range: ' + b.min + '\u2013' + b.max;
-        } else {
-          hint.textContent = b.min + '\u2013' + b.max + ' sq ft';
-        }
       }
     });
 
@@ -437,10 +456,7 @@
     }
 
     filterInputEls.forEach(function (el) {
-      el.addEventListener('input', function () {
-        filterThresholds = getThresholdsFromInputs(filterInputsByKey);
-        applyFilterState();
-      });
+      el.addEventListener('input', onFilterInputChange);
     });
 
     setFilterBarHeightCss();
@@ -508,6 +524,42 @@
       } else {
         footnote.setAttribute('hidden', '');
       }
+    }
+
+    function columnShouldGrey(colIndex) {
+      if (!isAnyFilterActive(filterThresholds)) {
+        return false;
+      }
+      var sel = document.querySelector('[data-product-select="' + colIndex + '"]');
+      if (!sel || !sel.value) {
+        return false;
+      }
+      return !productMatchesFilters(sel.value, data, filterThresholds);
+    }
+
+    function syncColumnGreyState(colIndex) {
+      var grey = columnShouldGrey(colIndex);
+      var head = document.querySelector('[data-col-head="' + colIndex + '"]');
+      if (head) {
+        head.classList.toggle('is-filter-nonconforming', grey);
+      }
+      document
+        .querySelectorAll('td.value-cell[data-col="' + colIndex + '"]')
+        .forEach(function (td) {
+          td.classList.toggle('is-filter-nonconforming', grey);
+        });
+    }
+
+    function syncAllColumnGreyStates() {
+      for (var c = 0; c < 5; c++) {
+        syncColumnGreyState(c);
+      }
+    }
+
+    function onFilterInputChange() {
+      filterThresholds = getThresholdsFromInputs(filterInputsByKey);
+      syncAllColumnGreyStates();
+      applyFilterState();
     }
 
     function syncColumnHeaderIcons(colIndex) {
@@ -629,6 +681,7 @@
         }
         syncColumnHeaderIcons(idx);
         syncUntestedFootnote();
+        syncColumnGreyState(idx);
       });
     });
 

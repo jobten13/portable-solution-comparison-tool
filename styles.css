@@ -66,31 +66,35 @@ body {
   position: sticky;
   top: 0;
   z-index: 11;
+  margin: 0 0.5rem 0.5rem;
+  padding: 0.75rem 0.65rem;
   background: var(--header-tint);
-  border-bottom: 1px solid var(--border);
-  padding: 0.65rem 0.75rem;
-  margin: 0 0 0.5rem;
+  border-radius: 6px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
 .filter-bar-inner {
   display: flex;
   flex-wrap: wrap;
-  gap: 1rem 1.5rem;
+  gap: 1rem 2rem;
   align-items: flex-end;
+  justify-content: center;
 }
 
 .filter-field {
   display: flex;
   flex-direction: column;
-  gap: 0.2rem;
-  min-width: 10rem;
-  flex: 1 1 12rem;
+  align-items: center;
+  gap: 0.25rem;
+  flex: 0 1 auto;
 }
 
 .filter-label {
   font-size: 0.8125rem;
   font-weight: 600;
   color: var(--text);
+  text-align: center;
+  white-space: nowrap;
 }
 
 .filter-input {
@@ -101,18 +105,12 @@ body {
   border-radius: 6px;
   background: var(--surface);
   color: var(--text);
-  width: 100%;
-  max-width: 10rem;
+  width: 10rem;
 }
 
 .filter-input:focus {
   outline: 2px solid var(--accent);
   outline-offset: 1px;
-}
-
-.filter-hint {
-  font-size: 0.75rem;
-  color: var(--text-muted);
 }
 
 .table-panel {
@@ -227,6 +225,13 @@ body {
 
 .product-select option:disabled {
   color: var(--text-muted);
+}
+
+.col-head.is-filter-nonconforming,
+td.value-cell.is-filter-nonconforming {
+  background-color: var(--accent-soft);
+  color: var(--text-muted);
+  opacity: 0.65;
 }
 
 .product-select:hover {
