@@ -6,7 +6,7 @@ Desktop-only, side-by-side comparison of portable shelter products from five ven
 
 Open `index.html` in a browser (double-click or any static file server). No build step, no npm dependencies. Google Fonts (DM Sans / DM Mono) load from the CDN link in `index.html`.
 
-**Quick start:** [QUICKSTART.html](QUICKSTART.html) or [QUICKSTART.pdf](QUICKSTART.pdf).
+**Quick start:** [QUICKSTART.html](QUICKSTART.html).
 
 ## What’s in v2
 
@@ -32,7 +32,6 @@ Open `index.html` in a browser (double-click or any static file server). No buil
 | `DESIGN_DECISIONS.md` | Planning decisions that shaped the tool |
 | `VERSION` | Semantic version string for this release |
 | `QUICKSTART.html` | Short usage and data-edit guide (browser) |
-| `QUICKSTART.pdf` | Printable quickstart (may lag `QUICKSTART.html`; regeneration deferred; in-tool help view under consideration) |
 
 `Reference Material/` is local reference only and is not part of the shipped tool (typically left untracked in git).
 
