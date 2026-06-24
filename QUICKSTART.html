@@ -103,7 +103,7 @@
 <body>
   <article class="doc">
     <h1>Portable Solution Comparison Tool — Quickstart</h1>
-    <p class="meta"><strong>Version 1.0.0</strong></p>
+    <p class="meta"><strong>Version 2.0.0</strong></p>
 
     <h2>Run the tool (30 seconds)</h2>
     <ol>
@@ -114,10 +114,19 @@
           <li>From the project folder: <code>python3 -m http.server 8080</code> then visit <code>http://localhost:8080/</code></li>
         </ul>
       </li>
-      <li>In each of the <strong>three columns</strong>, choose a product from the dropdown.</li>
+      <li>In each of the <strong>five columns</strong>, choose a product from the dropdown.</li>
       <li>Compare spec rows side by side. Pick <strong>Select a product ▾</strong> again to clear a column.</li>
     </ol>
     <p>No install, no build, no database.</p>
+
+    <h2>Filtering</h2>
+    <p>The sticky bar at the top has three number inputs:</p>
+    <ul>
+      <li><strong>Bed Capacity</strong> — minimum beds required</li>
+      <li><strong>Internal Floorspace</strong> — minimum sq ft</li>
+      <li><strong>External Footprint</strong> — maximum sq ft (what fits in your space)</li>
+    </ul>
+    <p>Products that do not meet all active thresholds are disabled in the dropdowns. If a column already has a product selected and it no longer matches, that column greys out (header and cells) but keeps the selection. Greying clears when the product matches again, you clear the column, or you remove all filters.</p>
 
     <h2>Using the UI</h2>
     <table>
@@ -127,7 +136,7 @@
       <tbody>
         <tr>
           <td>Choose a product</td>
-          <td>That column fills with spec values; dropdown shows <strong>Vendor — Product</strong> in bold; vendor logo appears below the dropdown</td>
+          <td>That column fills with spec values; dropdown shows the <strong>product name</strong> in bold (options are grouped under vendor headers); vendor logo appears below the dropdown</td>
         </tr>
         <tr>
           <td>Choose <strong>Select a product ▾</strong></td>
@@ -138,12 +147,16 @@
           <td>Allowed</td>
         </tr>
         <tr>
-          <td>HDT product selected</td>
-          <td>ⓘ appears beside the vendor logo; click for connector/shelter note</td>
+          <td>Product with an info note</td>
+          <td>ⓘ appears beside the vendor logo; click to open/close the shared info popover (driven by <code>infoText</code> on that product)</td>
         </tr>
         <tr>
           <td>Product marked with *</td>
-          <td>This product is included in the Vendor Product Catalog but was not independently tested by UC Davis. A footnote appears below the table when selected.</td>
+          <td>* This product is included in the Vendor Product Catalog but was not independently tested by UC Davis during any IMPACTS project events or exercises. The * icon beside the logo opens the same popover; a footnote appears below the table when selected.</td>
+        </tr>
+        <tr>
+          <td>Pin a spec row</td>
+          <td>Row moves to the top of the table for this session; pin again to restore default order</td>
         </tr>
         <tr>
           <td>Missing data in source</td>
@@ -169,7 +182,20 @@
     <ol>
       <li>Under the vendor in <code>vendors</code>, add to <code>products</code>:<br>
         <code>{ id: "dlx-new", name: "New Model", type: "shelter" }</code></li>
-      <li>Under <code>specs</code>, add <code>"dlx-new": { bedCapacity: null, extDims: null, ... }</code> with every key from <code>specRows</code>.</li>
+      <li>Under <code>specs</code>, add an entry with every display key from <code>specRows</code> plus a <code>filter</code> object:</li>
+    </ol>
+    <pre>"dlx-new": {
+  bedCapacity: null,
+  extDims: null,
+  // ... every specRows key ...
+  filter: {
+    bedCapacity: 8,
+    extSqFt: 500,
+    intSqFt: 400
+  }
+}</pre>
+    <p>Use <code>{ min, max }</code> for bed ranges, <code>{ excluded: true }</code> when no filterable number exists. See the comment block above <code>specs</code> in <code>data.js</code>.</p>
+    <ol start="3">
       <li>Refresh the browser.</li>
     </ol>
     <p><strong>Example — add a vendor</strong></p>
@@ -184,7 +210,7 @@
 
     <h2>What not to edit for routine updates</h2>
     <ul>
-      <li><code>app.js</code> — behavior (dropdowns, TBD/N/A rules, HDT popover, logo wiring)</li>
+      <li><code>app.js</code> — behavior (dropdowns, filtering, TBD/N/A rules, info/untested popover, pinning, logo wiring)</li>
       <li><code>index.html</code> / <code>styles.css</code> — layout and look</li>
       <li><code>logos/</code> — vendor logo images; add files here when adding a new vendor, otherwise leave as-is</li>
       <li><code>Reference Material/</code> — local source docs; not loaded by the app</li>
@@ -194,7 +220,8 @@
       More detail: <a href="README.md">README.md</a> ·
       <a href="DESIGN_DECISIONS.md">DESIGN_DECISIONS.md</a> ·
       <a href="VERSION">VERSION</a> ·
-      Open the tool: <a href="index.html">index.html</a>
+      Open the tool: <a href="index.html">index.html</a><br>
+      <span style="margin-top:0.5rem;display:inline-block"><a href="QUICKSTART.pdf">QUICKSTART.pdf</a> may lag this page; PDF regeneration is deferred. An in-tool help view is under consideration.</span>
     </p>
   </article>
 </body>
