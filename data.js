@@ -101,7 +101,7 @@
       },
       'blumed-2039': {
         bedCapacity: '10',
-        extDims: "780 sq ft (39' × 20')",
+        extDims: "780 sq ft (20' × 39')",
         intDims: '780 sq ft',
         wind: '80 MPH Sustained, 100 MPH Gusts',
         snow: '15 lb. per sq ft (PSF)',
@@ -120,7 +120,7 @@
       },
       'dlx-asap18': {
         bedCapacity: '3',
-        extDims: "288 sq ft (18' × 16')",
+        extDims: "288 sq ft (16' × 18')",
         intDims: '288 sq ft',
         wind: '55 mph sustained, 65 mph gusts',
         snow: '5 lbs/sq ft',
@@ -154,7 +154,7 @@
       },
       'dlx-x24': {
         bedCapacity: '8',
-        extDims: "528 sq ft (24' × 22')",
+        extDims: "528 sq ft (22' × 24')",
         intDims: '516 sq ft',
         wind: '65 mph sustained, 75 mph gusts',
         snow: '10 lbs/sq ft',
@@ -188,7 +188,7 @@
       },
       'dlx-x32': {
         bedCapacity: '12',
-        extDims: "704 sq ft (32' × 22')",
+        extDims: "704 sq ft (22' × 32')",
         intDims: '688 sq ft',
         wind: '65 mph sustained, 75 mph gusts',
         snow: '10 lbs/sq ft',
@@ -205,7 +205,7 @@
       },
       'dlx-x40': {
         bedCapacity: '14',
-        extDims: "880 sq ft (40' × 22')",
+        extDims: "880 sq ft (22' × 40')",
         intDims: '860 sq ft',
         wind: '65 mph sustained, 75 mph gusts',
         snow: '10 lbs/sq ft',
@@ -313,7 +313,7 @@
       },
       'zumro-400': {
         bedCapacity: '6 to 8',
-        extDims: "420 sq ft (21' × 20')",
+        extDims: "420 sq ft (20' × 21')",
         intDims: '400 sq ft',
         wind: '55 MPH',
         snow: '3.51 lbs. per square foot STATIC load',
@@ -330,7 +330,7 @@
       },
       'zumro-600': {
         bedCapacity: '10 to 12',
-        extDims: "651 sq ft (31' × 21')",
+        extDims: "651 sq ft (21' × 31')",
         intDims: '600 sq ft',
         wind: '55 MPH',
         snow: '3.29 lbs. per square foot STATIC load',
