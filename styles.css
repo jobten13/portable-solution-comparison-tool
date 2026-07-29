@@ -36,17 +36,48 @@ body {
 }
 
 .page-header {
-  text-align: center;
   padding: 1rem 2rem 0.875rem;
   border-bottom: 1px solid var(--border);
   background: var(--header-tint);
 }
 
+.page-header-inner {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 0.75rem;
+}
+
 .page-title {
-  margin: 0 0 0.25rem;
+  grid-column: 2;
+  margin: 0;
   font-size: 1.5rem;
   font-weight: 600;
   letter-spacing: -0.02em;
+  text-align: center;
+}
+
+.help-trigger {
+  grid-column: 3;
+  justify-self: end;
+  font-family: "DM Sans", system-ui, sans-serif;
+  font-size: 0.875rem;
+  font-weight: 500;
+  padding: 0.4rem 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--accent-soft);
+  color: var(--accent);
+  cursor: pointer;
+}
+
+.help-trigger:hover {
+  background: #dde0e5;
+}
+
+.help-trigger:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
 }
 
 .main {
@@ -436,4 +467,216 @@ td.value-cell.is-filter-nonconforming {
   color: var(--text-muted);
   text-align: left;
   line-height: 1.5;
+}
+
+/* —— Help overlay (isolated; do not share with .popover / table controls) —— */
+
+#vpc-help-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+}
+
+#vpc-help-overlay[hidden] {
+  display: none;
+}
+
+.help-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(26, 26, 24, 0.45);
+}
+
+.help-panel {
+  position: relative;
+  z-index: 1;
+  width: min(28rem, calc(100vw - 2rem));
+  max-height: calc(100vh - 3rem);
+  overflow: auto;
+  padding: 1.25rem 1.35rem 1.35rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  box-shadow: 0 12px 40px rgba(26, 26, 24, 0.18);
+}
+
+.help-panel-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 1.15rem;
+}
+
+.help-panel-title {
+  margin: 0;
+  font-size: 1.125rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--text);
+}
+
+.help-close {
+  flex-shrink: 0;
+  width: 1.75rem;
+  height: 1.75rem;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-size: 1.25rem;
+  line-height: 1;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.help-close:hover {
+  background: #dde0e5;
+}
+
+.help-close:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+.help-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  margin-bottom: 1.15rem;
+}
+
+.help-line {
+  margin: 0;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text);
+}
+
+.help-graphic {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.help-footnote {
+  margin: 0.25rem 0 0;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--border);
+  font-size: 0.8125rem;
+  color: var(--text-muted);
+}
+
+/* Static illustrations — help-only classes */
+
+.help-illus-dropdown {
+  width: 14rem;
+}
+
+.help-illus-dropdown-face {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.5rem 0.7rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--bg);
+}
+
+.help-illus-dropdown-label {
+  font-size: 0.8125rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.help-illus-chevron {
+  flex-shrink: 0;
+  width: 0;
+  height: 0;
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-top: 5px solid var(--text-muted);
+}
+
+.help-illus-dropdown-menu {
+  margin-top: 0.35rem;
+  padding: 0.45rem 0;
+  min-height: 4.25rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--surface);
+}
+
+.help-illus-option {
+  display: block;
+  padding: 0.45rem 0.75rem;
+  font-size: 0.8125rem;
+  color: var(--text-muted);
+}
+
+.help-illus-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem 0.85rem;
+}
+
+.help-illus-field {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.help-illus-field-box {
+  display: block;
+  box-sizing: border-box;
+  width: 6.5rem;
+  min-height: 1.85rem;
+  padding: 0.35rem 0.5rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--surface);
+  font-size: 0.8125rem;
+  color: var(--text-muted);
+  line-height: 1.25;
+}
+
+.help-illus-pin-row {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.help-illus-pin {
+  flex-shrink: 0;
+  width: 1.75rem;
+  height: 1.75rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--accent-soft);
+  color: var(--accent);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.help-illus-pin svg {
+  display: block;
+}
+
+.help-illus-row-bar {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: #3a3a36;
+  padding: 0.35rem 0.5rem;
+  border-radius: 4px;
+  background: var(--bg);
 }

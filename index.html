@@ -12,7 +12,15 @@
 <body>
 
 <header class="page-header">
-  <h1 class="page-title">Portable Solution Comparison Tool</h1>
+  <div class="page-header-inner">
+    <h1 class="page-title">Portable Solution Comparison Tool</h1>
+    <button
+      type="button"
+      class="help-trigger"
+      aria-expanded="false"
+      aria-controls="vpc-help-overlay"
+    >Help</button>
+  </div>
 </header>
 
 <main class="main" data-vpc-comparison>
@@ -118,6 +126,72 @@
 </main>
 
 <div class="popover" id="vpc-info-popover" role="dialog" aria-label="Product note" hidden></div>
+
+<div id="vpc-help-overlay" hidden>
+  <div class="help-backdrop" data-help-backdrop></div>
+  <div
+    class="help-panel"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="vpc-help-title"
+  >
+    <div class="help-panel-header">
+      <h2 id="vpc-help-title" class="help-panel-title">How to use this tool</h2>
+      <button type="button" class="help-close" aria-label="Close help" data-help-close>
+        <span aria-hidden="true">×</span>
+      </button>
+    </div>
+
+    <div class="help-section">
+      <p class="help-line">Click to select products to compare</p>
+      <div class="help-graphic" aria-hidden="true">
+        <div class="help-illus-dropdown">
+          <div class="help-illus-dropdown-face">
+            <span class="help-illus-dropdown-label">Select a product</span>
+            <span class="help-illus-chevron"></span>
+          </div>
+          <div class="help-illus-dropdown-menu">
+            <span class="help-illus-option">Vendor A</span>
+            <span class="help-illus-option">Vendor B</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="help-section">
+      <p class="help-line">Filter to match your requirements</p>
+      <div class="help-graphic" aria-hidden="true">
+        <div class="help-illus-filters">
+          <div class="help-illus-field">
+            <span class="help-illus-field-box">min beds</span>
+          </div>
+          <div class="help-illus-field">
+            <span class="help-illus-field-box">min sq ft</span>
+          </div>
+          <div class="help-illus-field">
+            <span class="help-illus-field-box">max sq ft</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="help-section">
+      <p class="help-line">Pin rows to keep them at the top</p>
+      <div class="help-graphic" aria-hidden="true">
+        <div class="help-illus-pin-row">
+          <span class="help-illus-pin">
+            <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true">
+              <path d="M16 12V4h1V2H7v2h1v8l-2 2v2h5.2v6h1.6v-6H18v-2l-2-2z" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linejoin="round" stroke-linecap="round"/>
+            </svg>
+          </span>
+          <span class="help-illus-row-bar">Snow load</span>
+        </div>
+      </div>
+    </div>
+
+    <p class="help-footnote">Look for ⓘ and * for extra details</p>
+  </div>
+</div>
 
 <script src="data.js"></script>
 <script src="app.js"></script>

@@ -695,9 +695,64 @@
     syncUntestedFootnote();
   }
 
+  function initHelp() {
+    var overlay = document.getElementById('vpc-help-overlay');
+    var trigger = document.querySelector('.help-trigger');
+    if (!overlay || !trigger) return;
+
+    var backdrop = overlay.querySelector('[data-help-backdrop]');
+    var closeBtn = overlay.querySelector('[data-help-close]');
+
+    function isOpen() {
+      return !overlay.hidden;
+    }
+
+    function openHelp() {
+      overlay.hidden = false;
+      trigger.setAttribute('aria-expanded', 'true');
+    }
+
+    function closeHelp() {
+      overlay.hidden = true;
+      trigger.setAttribute('aria-expanded', 'false');
+    }
+
+    trigger.addEventListener('click', function (ev) {
+      ev.preventDefault();
+      if (isOpen()) {
+        closeHelp();
+      } else {
+        openHelp();
+      }
+    });
+
+    if (closeBtn) {
+      closeBtn.addEventListener('click', function (ev) {
+        ev.preventDefault();
+        closeHelp();
+      });
+    }
+
+    if (backdrop) {
+      backdrop.addEventListener('click', function () {
+        closeHelp();
+      });
+    }
+
+    document.addEventListener('keydown', function (ev) {
+      if (ev.key === 'Escape' && isOpen()) {
+        closeHelp();
+      }
+    });
+  }
+
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', init);
+    document.addEventListener('DOMContentLoaded', function () {
+      init();
+      initHelp();
+    });
   } else {
     init();
+    initHelp();
   }
 })();
