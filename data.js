@@ -258,7 +258,7 @@
       },
       'hdt-8d36': {
         bedCapacity: '18',
-        extDims: '~935 sq ft (Dome)',
+        extDims: '~1184 sq ft (Dome)',
         intDims: '935 sq ft',
         wind: '55 mph constant and 65 mph gusts',
         snow: '10 lbs per sq ft',
@@ -347,7 +347,7 @@
       },
       'zumro-quad': {
         bedCapacity: null,
-        extDims: '~570 sq ft (4-way connector)',
+        extDims: "~600 sq ft (20' × 30')",
         intDims: '454 sq ft',
         wind: '55 MPH',
         snow: '3.44 lbs. per square foot STATIC load',
