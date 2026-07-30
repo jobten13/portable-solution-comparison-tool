@@ -573,6 +573,23 @@ td.value-cell.is-filter-nonconforming {
   color: var(--text-muted);
 }
 
+.help-illus-info,
+.help-illus-untested {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  width: 1.75rem;
+  height: 1.75rem;
+  margin: 0 0.1rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-size: 0.85rem;
+  line-height: 1;
+}
+
 /* Static illustrations — help-only classes */
 
 .help-illus-dropdown {
