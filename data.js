@@ -61,6 +61,10 @@
         products: [
           { id: 'ws-gk20', name: 'GK-20', type: 'shelter' },
           { id: 'ws-gk1935', name: 'GK-1935', type: 'shelter' },
+          { id: 'ws-gk2360', name: 'GateKeeper 2360', type: 'shelter', tested: false },
+          { id: 'ws-gk2342', name: 'GateKeeper 2342', type: 'shelter', tested: false },
+          { id: 'ws-guardian-2032', name: 'Guardian 2032', type: 'shelter', tested: false },
+          { id: 'ws-guardian-3065', name: 'Guardian 3065', type: 'shelter', tested: false },
         ],
       },
       {
@@ -69,6 +73,14 @@
         products: [
           { id: 'zumro-400', name: 'Model 400', type: 'shelter' },
           { id: 'zumro-600', name: 'Model 600', type: 'shelter' },
+          { id: 'zumro-216', name: 'Model 216', type: 'shelter', tested: false },
+          { id: 'zumro-900', name: 'Model 900', type: 'shelter', tested: false },
+          {
+            id: 'zumro-airlock',
+            name: 'External Airlock Shelter System',
+            type: 'connector',
+            tested: false,
+          },
           { id: 'zumro-quad', name: 'QUAD Interface', type: 'connector' },
         ],
       },
@@ -380,6 +392,78 @@
           intSqFt: 570,
         },
       },
+      'ws-gk2360': {
+        bedCapacity: '22',
+        extDims: '~1403 sq ft (Clipped-corner rectangle)',
+        intDims: '1274 sq ft',
+        wind: '55 mph w/gusts to 65 mph',
+        snow: '10 lbs. / ft² for 12 hrs.',
+        fire: 'NFPA 701',
+        setup: '60 min w/ 12 people per shelter.',
+        ground: 'Hard & level (concrete, grass, dirt)',
+        lifespan: '10+ years with proper care & maintenance.',
+        repair:
+          'Yearly inspection & maintenance - parts can be ordered individually as needed.',
+        filter: {
+          bedCapacity: 22,
+          extSqFt: 1403,
+          intSqFt: 1274,
+        },
+      },
+      'ws-gk2342': {
+        bedCapacity: '17',
+        extDims: '~966 sq ft (Clipped-corner rectangle)',
+        intDims: '840 sq ft',
+        wind: '55 mph w/gusts to 65 mph',
+        snow: '10 lbs. / ft² for 12 hrs.',
+        fire: 'NFPA 701',
+        setup: '60 min w/ 12 people per shelter.',
+        ground: 'Hard & level (concrete, grass, dirt)',
+        lifespan: '10+ years with proper care & maintenance.',
+        repair:
+          'Yearly inspection & maintenance - parts can be ordered individually as needed.',
+        filter: {
+          bedCapacity: 17,
+          extSqFt: 966,
+          intSqFt: 840,
+        },
+      },
+      'ws-guardian-2032': {
+        bedCapacity: '14',
+        extDims: "660 sq ft (20' × 33')",
+        intDims: '650 sq ft',
+        wind: '90 mph w/gusts to 120 mph',
+        snow: '24 lbs. / ft² for 12 hrs.',
+        fire: 'NFPA 701',
+        setup: '30 min w/ 4 people per shelter.',
+        ground: 'Hard & level (concrete, grass, dirt)',
+        lifespan: '10+ years with proper care & maintenance.',
+        repair:
+          'Yearly inspection & maintenance - parts can be ordered individually as needed.',
+        filter: {
+          bedCapacity: 14,
+          extSqFt: 660,
+          intSqFt: 650,
+        },
+      },
+      'ws-guardian-3065': {
+        bedCapacity: '42',
+        extDims: "1950 sq ft (30' × 65')",
+        intDims: '1950 sq ft',
+        wind: '90 mph w/gusts to 120 mph',
+        snow: '24 lbs. / ft² for 12 hrs.',
+        fire: 'NFPA 701',
+        setup: '30 min w/ 4 people per shelter.',
+        ground: 'Hard & level (concrete, grass, dirt)',
+        lifespan: '10+ years with proper care & maintenance.',
+        repair:
+          'Yearly inspection & maintenance - parts can be ordered individually as needed.',
+        filter: {
+          bedCapacity: 42,
+          extSqFt: 1950,
+          intSqFt: 1950,
+        },
+      },
       'zumro-400': {
         bedCapacity: '6 to 8',
         extDims: "420 sq ft (20' × 21')",
@@ -412,6 +496,63 @@
           bedCapacity: { min: 10, max: 12 },
           extSqFt: 651,
           intSqFt: 600,
+        },
+      },
+      'zumro-216': {
+        bedCapacity: '4 to 8',
+        extDims: "240 sq ft (15' × 16')",
+        intDims: '216 sq ft',
+        wind: '50 mph',
+        snow:
+          '3.44 lbs. per square foot STATIC load (Roof pitch specifically designed for snow/rain removal)',
+        fire: 'NFPA 701',
+        setup: '3 Minutes 1-2 Personnel',
+        ground: 'Hard & Level Preferred',
+        lifespan: '15+ years with proper maintenance & care',
+        repair:
+          'Annual Inspections & Maintenance as needed. ZUMRO replacement parts available through sales rep, online or website',
+        filter: {
+          bedCapacity: { min: 4, max: 8 },
+          extSqFt: 240,
+          intSqFt: 216,
+        },
+      },
+      'zumro-900': {
+        bedCapacity: '20 to 25',
+        extDims: "990 sq ft (30' × 33')",
+        intDims: '900 sq ft',
+        wind: '50 mph',
+        snow:
+          '3.44 lbs. per square foot STATIC load (Roof pitch specifically designed for snow/rain removal)',
+        fire: 'NFPA 701',
+        setup: '5-7 Minutes 2-3 Personnel',
+        ground: 'Hard & Level Preferred',
+        lifespan: '15+ years with proper maintenance & care',
+        repair:
+          'Annual Inspections & Maintenance as needed. ZUMRO replacement parts available through sales rep, online or website',
+        filter: {
+          bedCapacity: { min: 20, max: 25 },
+          extSqFt: 990,
+          intSqFt: 900,
+        },
+      },
+      'zumro-airlock': {
+        bedCapacity: null,
+        extDims: "88 sq ft (8' × 11')",
+        intDims: '100 sq ft',
+        wind: '50 mph',
+        snow:
+          '3.44 lbs. per square foot STATIC load (Roof pitch specifically designed for snow/rain removal)',
+        fire: 'NFPA 701',
+        setup: '2 Minutes 1 Personnel',
+        ground: 'Hard & Level Preferred',
+        lifespan: '15+ years with proper maintenance & care',
+        repair:
+          'Annual Inspections & Maintenance as needed. ZUMRO replacement parts available through sales rep, online or website',
+        filter: {
+          bedCapacity: { excluded: true },
+          extSqFt: 88,
+          intSqFt: 100,
         },
       },
       'zumro-quad': {

@@ -40,6 +40,18 @@ Decisions made during planning that shaped the tool. Captured here so the trail 
 
 19. **Derived / nominal values use tilde + ⓘ when needed, not a new UI marker.** There is no separate “derived vs vendor-confirmed” flag beyond display. FORTS bed capacity `~2 to 3` is diagram-derived from uneven per-unit bed icons in the assembly drawing (not vendor-stated per Model 38) and stands with the tilde alone. WILSCOT per-unit `intDims` use a leading `~` because the Portable Solution Catalogue only stated a combined interior total; provenance is explained via `infoText` / ⓘ. Untested (`tested: false` / dropdown `*` + header banner) remains a separate concern.
 
+20. **Standing PSC vs vendor-sheet sourcing.** For product additions: **dimensions** (exterior footprint / interior floorspace) come from the individual vendor spec sheet or dimensioned diagram when one exists; **all other** comparison-row specs (wind, snow, fire, setup, ground, lifespan, repair) come from the Portable Solution Catalogue (PSC) summary for that vendor. If no individual sheet/diagram exists, PSC supplies dimensions too—flag that explicitly in docs for the affected products. Where PSC and an individual source **genuinely conflict** on an overlapping non-dimension field, **use the PSC value for now** and list the conflict under vendor verification; do not silently prefer the sheet for those fields.
+
+21. **Western Shelter / ZUMRO shape families (2026 additions).** GateKeeper 2342 and 2360 are clipped-corner rectangles like GK-1935: exterior uses `~N sq ft (Clipped-corner rectangle)` from the ceiling-rounded bounding box; interior uses the vendor sheet’s Square Footage with no tilde. Guardian 2032 and 3065 are Quonset/arched (BLU-MED XPH family): plain ceiling-rounded rectangle exterior, no tilde; **PSC-only** for both dimensions and specs until individual sheets exist (no per-product `infoText`). GK-20 (octagon) is unchanged. ZUMRO Model 900 exterior uses diagram width `32'9"` (PSC `32.9"` treated as a typo). External Airlock is a `connector` (`bedCapacity: null`).
+
+## Vendor verification backlog
+
+Unresolved PSC ↔ individual-source conflicts / anomalies (do not resolve in data without vendor confirmation):
+
+1. **GateKeeper 2360 setup personnel:** PSC `60 min w/ 12 people`; `SW-2360.pdf` Total Set-Up Time `60 min / 6 personnel`.
+2. **GateKeeper 2342 setup:** PSC `60 min w/ 12 people`; `SW-2342_Shelter.pdf` Total Set-Up Time `50 min / 6 personnel`.
+3. **ZUMRO External Airlock interior vs exterior:** PSC interior `10x10` authored as `100 sq ft`; ceiling exterior from PSC/diagram inches is `88 sq ft (8' × 11')`—interior larger than exterior envelope.
+
 ## Parked / future work
 
 - **Hub-as-usable-space:** DLX's X-Hub and ZUMRO's QUAD could theoretically serve as ancillary space (nurses' station, lab) with spoke doors closed. Not yet represented in the tool.
