@@ -15,10 +15,10 @@ Open `index.html` in a browser (double-click or any static file server). No buil
 - **Filtering:** sticky filter bar with three number inputs (Bed Capacity min, Internal Floorspace min, External Footprint max). Non-matching products are disabled in the dropdowns. A column whose selected product no longer matches greys out (header + cells); the selection is kept. Greying clears when the product conforms again, the column is cleared, or all filters are removed. The ⓘ info popover stays clickable on greyed columns.
 - **Cell display:** string values as-is; `null` → **TBD** pill; bed capacity on **connector** products → **N/A**.
 - **Vendor logos:** each vendor's logo appears below the column dropdown when a product is selected.
-- **Sticky header:** the filter bar sticks at the top of the viewport; the dropdown/logo row sticks just below it on scroll.
+- **Sticky header:** the filter bar sticks at the top of the viewport; the untested banner (when visible) and the dropdown/logo row stick just below it on scroll.
 - **Row pinning:** pin a spec row to move it to the top of the table for the session (unpin to restore default order).
-- **Product notes:** ⓘ appears beside the vendor logo when the selected product has an `infoText` field (click to open/close the shared popover). Only Base-X 8D36 has one today.
-- **Untested products:** four DLX products not independently tested by UC Davis show ` *` after the name in the dropdown and a `*` icon beside the logo when selected; a footnote appears below the table when any such product is selected: *This product is included in the Vendor Product Catalog but was not independently tested by UC Davis during any IMPACTS project events or exercises.*
+- **Product notes:** ⓘ appears beside the vendor logo when the selected product has an `infoText` field (click to open/close the shared popover), including when that product is also untested.
+- **Untested products:** products not independently tested by UC Davis show ` *` after the name in the dropdown. When any selected column is untested, a sticky header banner states: *Indicates products included in the Portable Solution Catalogue, but not independently tested by UC Davis during any IMPACTS project events or exercises.*
 - **Scope:** vestibules and multi-bed configuration rows are out of scope for v1 (see [DESIGN_DECISIONS.md](DESIGN_DECISIONS.md)).
 
 ## File roles
@@ -27,7 +27,7 @@ Open `index.html` in a browser (double-click or any static file server). No buil
 |------|---------|
 | `index.html` | Page shell, fonts, table structure; loads `data.js` then `app.js` |
 | `styles.css` | All styling (desktop-focused, full-width layout) |
-| `app.js` | Dropdowns, filtering, column fill/clear, info/untested popover, pinning, cell rendering |
+| `app.js` | Dropdowns, filtering, column fill/clear, info popover, untested banner, pinning, cell rendering |
 | `data.js` | **Routine data updates** — `window.VPC_COMPARISON_DATA` |
 | `DESIGN_DECISIONS.md` | Planning decisions that shaped the tool |
 | `VERSION` | Semantic version string for this release |
@@ -54,7 +54,7 @@ Expose one object on `window.VPC_COMPARISON_DATA`:
 **Product** (optional fields):
 
 - `infoText` — per-product note text; when present, drives the ⓘ popover for that product.
-- `tested: false` — marks the product as not independently tested by UC Davis. Appends ` *` to the dropdown label and shows the `*` icon and footnote when selected.
+- `tested: false` — marks the product as not independently tested by UC Davis. Appends ` *` to the dropdown label and shows the sticky header banner when any such product is selected.
 
 **`filter`** on each `specs` entry (required for filtering): hand-authored structured values separate from display strings:
 

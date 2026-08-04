@@ -43,6 +43,13 @@
   <div class="table-panel">
     <table class="compare-table" data-compare-table>
       <thead>
+        <tr class="untested-banner-row" data-untested-banner-row hidden>
+          <th class="untested-banner-cell" colspan="6" scope="colgroup">
+            <p class="untested-banner" data-untested-banner role="status">
+              * Indicates products included in the Portable Solution Catalogue, but not independently tested by UC Davis during any IMPACTS project events or exercises.
+            </p>
+          </th>
+        </tr>
         <tr>
           <th class="corner-cell" scope="col"></th>
           <th class="col-head" scope="col" data-col-head="0">
@@ -55,7 +62,6 @@
               <div class="logo-trigger-wrap">
                 <img class="vendor-logo" data-vendor-logo="0" alt="" hidden>
                 <button type="button" class="info-trigger" data-info-trigger="0" aria-label="Product note" aria-expanded="false" aria-controls="vpc-info-popover" hidden>ⓘ</button>
-                <button type="button" class="untested-trigger" data-untested-trigger="0" aria-label="Not independently tested" aria-expanded="false" aria-controls="vpc-info-popover" hidden>*</button>
               </div>
             </div>
           </th>
@@ -69,7 +75,6 @@
               <div class="logo-trigger-wrap">
                 <img class="vendor-logo" data-vendor-logo="1" alt="" hidden>
                 <button type="button" class="info-trigger" data-info-trigger="1" aria-label="Product note" aria-expanded="false" aria-controls="vpc-info-popover" hidden>ⓘ</button>
-                <button type="button" class="untested-trigger" data-untested-trigger="1" aria-label="Not independently tested" aria-expanded="false" aria-controls="vpc-info-popover" hidden>*</button>
               </div>
             </div>
           </th>
@@ -83,7 +88,6 @@
               <div class="logo-trigger-wrap">
                 <img class="vendor-logo" data-vendor-logo="2" alt="" hidden>
                 <button type="button" class="info-trigger" data-info-trigger="2" aria-label="Product note" aria-expanded="false" aria-controls="vpc-info-popover" hidden>ⓘ</button>
-                <button type="button" class="untested-trigger" data-untested-trigger="2" aria-label="Not independently tested" aria-expanded="false" aria-controls="vpc-info-popover" hidden>*</button>
               </div>
             </div>
           </th>
@@ -97,7 +101,6 @@
               <div class="logo-trigger-wrap">
                 <img class="vendor-logo" data-vendor-logo="3" alt="" hidden>
                 <button type="button" class="info-trigger" data-info-trigger="3" aria-label="Product note" aria-expanded="false" aria-controls="vpc-info-popover" hidden>ⓘ</button>
-                <button type="button" class="untested-trigger" data-untested-trigger="3" aria-label="Not independently tested" aria-expanded="false" aria-controls="vpc-info-popover" hidden>*</button>
               </div>
             </div>
           </th>
@@ -111,7 +114,6 @@
               <div class="logo-trigger-wrap">
                 <img class="vendor-logo" data-vendor-logo="4" alt="" hidden>
                 <button type="button" class="info-trigger" data-info-trigger="4" aria-label="Product note" aria-expanded="false" aria-controls="vpc-info-popover" hidden>ⓘ</button>
-                <button type="button" class="untested-trigger" data-untested-trigger="4" aria-label="Not independently tested" aria-expanded="false" aria-controls="vpc-info-popover" hidden>*</button>
               </div>
             </div>
           </th>
@@ -122,7 +124,6 @@
       </tbody>
     </table>
   </div>
-  <p class="footnote" data-untested-footnote hidden>* This product is included in the Vendor Product Catalog but was not independently tested by UC Davis during any IMPACTS project events or exercises.</p>
 </main>
 
 <div class="popover" id="vpc-info-popover" role="dialog" aria-label="Product note" hidden></div>
@@ -189,7 +190,7 @@
       </div>
     </div>
 
-    <p class="help-footnote">Look for <span class="help-illus-info" aria-hidden="true">ⓘ</span> and <span class="help-illus-untested" aria-hidden="true">*</span> for extra details</p>
+    <p class="help-footnote">Look for <span class="help-illus-info" aria-hidden="true">ⓘ</span> for extra details</p>
   </div>
 </div>
 

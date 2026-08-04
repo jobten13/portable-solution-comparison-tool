@@ -32,6 +32,7 @@
         logo: 'logos/dlx.png',
         products: [
           { id: 'dlx-asap18', name: 'ASAP18',  type: 'shelter', tested: false },
+          { id: 'dlx-x8',     name: 'X-8',     type: 'shelter', tested: false },
           { id: 'dlx-x16',    name: 'X-16',    type: 'shelter', tested: false },
           { id: 'dlx-x24',    name: 'X-24',    type: 'shelter' },
           { id: 'dlx-x24sc',  name: 'X-24SC',  type: 'shelter', tested: false },
@@ -69,6 +70,57 @@
           { id: 'zumro-400', name: 'Model 400', type: 'shelter' },
           { id: 'zumro-600', name: 'Model 600', type: 'shelter' },
           { id: 'zumro-quad', name: 'QUAD Interface', type: 'connector' },
+        ],
+      },
+      {
+        name: 'Craftsmen',
+        logo: 'logos/craftsmen.png',
+        structure: 'hard-sided',
+        products: [
+          {
+            id: 'craftsmen-8bed-icu',
+            name: '8-Bed ICU Trailer',
+            type: 'shelter',
+            tested: false,
+          },
+        ],
+      },
+      {
+        name: 'FORTS',
+        logo: 'logos/forts.png',
+        structure: 'hard-sided',
+        products: [
+          {
+            id: 'forts-38',
+            name: 'Model 38',
+            type: 'shelter',
+            tested: false,
+            infoText:
+              'Contact vendor for setup time for your desired configuration.',
+          },
+        ],
+      },
+      {
+        name: 'WILSCOT',
+        logo: 'logos/wilscot.png',
+        structure: 'hard-sided',
+        products: [
+          {
+            id: 'wilscot-patient',
+            name: 'Patient Unit',
+            type: 'shelter',
+            tested: false,
+            infoText:
+              'Per-unit interior floorspace not stated in the Portable Solution Catalogue; inferred from unit footprint.',
+          },
+          {
+            id: 'wilscot-staff',
+            name: 'Staff Unit',
+            type: 'shelter',
+            tested: false,
+            infoText:
+              'Per-unit interior floorspace not stated in the Portable Solution Catalogue; inferred from unit footprint.',
+          },
         ],
       },
     ],
@@ -133,6 +185,23 @@
           bedCapacity: 3,
           extSqFt: 288,
           intSqFt: 288,
+        },
+      },
+      'dlx-x8': {
+        bedCapacity: 'N/A',
+        extDims: "176 sq ft (8' × 22')",
+        intDims: '172 sq ft',
+        wind: '65 mph sustained, 75 mph gusts',
+        snow: '10 lbs/sq ft',
+        fire: 'NFPA 701',
+        setup: '3 personnel; 15 minutes under canopy, 30 minutes full setup',
+        ground: 'Flat, dry ground, asphalt, or concrete.',
+        lifespan: '10 years if properly maintained',
+        repair: 'Vinyl repairs may be needed if damaged during use. Repair kit included.',
+        filter: {
+          bedCapacity: { excluded: true },
+          extSqFt: 176,
+          intSqFt: 172,
         },
       },
       'dlx-x16': {
@@ -360,6 +429,79 @@
           bedCapacity: { excluded: true },
           extSqFt: 570,
           intSqFt: 454,
+        },
+      },
+      'craftsmen-8bed-icu': {
+        bedCapacity: '8',
+        extDims: "1219 sq ft (23' × 53')",
+        intDims: '1010 sq ft',
+        wind: '100 mph anchored',
+        snow: '40 lbs / ft2',
+        fire: 'Materials have a rating, the trailer assembly is not rated',
+        setup: '4 hours, 6 Personnel',
+        ground:
+          'Level, Hard Surface. Manually controlled hydraulic leveling system',
+        lifespan: '10 years',
+        repair:
+          'Call Craftsmen at 1-800-373-3575 and request Customer Service Department',
+        filter: {
+          bedCapacity: 8,
+          extSqFt: 1219,
+          intSqFt: 1010,
+        },
+      },
+      'forts-38': {
+        bedCapacity: '~2 to 3',
+        extDims: "360 sq ft (18' × 20')",
+        intDims: '273 sq ft',
+        wind: '180 mph anchored',
+        snow: '30-40 lbs / ft2',
+        fire:
+          'Class “A” Spread of Flame for exterior fire resistance, per ASTM E108-07A, Southwest Research, Department of Fire Technology.',
+        setup: 'Contact vendor',
+        ground: 'Rough terrain capable on uneven, steep slope environments',
+        lifespan: '10 years',
+        repair: 'Call FORTS USA customer service at 954-949-3200',
+        filter: {
+          bedCapacity: { min: 2, max: 3 },
+          extSqFt: 360,
+          intSqFt: 273,
+        },
+      },
+      'wilscot-patient': {
+        bedCapacity: '6',
+        extDims: "1440 sq ft (24' × 60')",
+        intDims: '~1440 sq ft',
+        wind: '140 mph anchored',
+        snow: '50 lbs / ft2',
+        fire: 'IBC V-B (Variance or Modification Required)',
+        setup: 'Ranges by number of structures (~2 weeks)',
+        ground:
+          'Level, Hard Surface. Foundation (typically piers and footings) must be approved by a licensed professional engineer.',
+        lifespan: '20-30 years',
+        repair: 'Contract with Willscot or 3rd party vendor',
+        filter: {
+          bedCapacity: 6,
+          extSqFt: 1440,
+          intSqFt: 1440,
+        },
+      },
+      'wilscot-staff': {
+        bedCapacity: 'N/A',
+        extDims: "720 sq ft (12' × 60')",
+        intDims: '~720 sq ft',
+        wind: '140 mph anchored',
+        snow: '50 lbs / ft2',
+        fire: 'IBC V-B (Variance or Modification Required)',
+        setup: 'Ranges by number of structures (~2 weeks)',
+        ground:
+          'Level, Hard Surface. Foundation (typically piers and footings) must be approved by a licensed professional engineer.',
+        lifespan: '20-30 years',
+        repair: 'Contract with Willscot or 3rd party vendor',
+        filter: {
+          bedCapacity: { excluded: true },
+          extSqFt: 720,
+          intSqFt: 720,
         },
       },
     },

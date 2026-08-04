@@ -1,9 +1,6 @@
 (function () {
   'use strict';
 
-  var UNTESTED_POPOVER_TEXT =
-    'Not independently tested by UC Davis during IMPACTS project events or exercises.';
-
   function productInfoText(product) {
     if (
       product &&
@@ -187,12 +184,19 @@
     }
   }
 
-  function setFilterBarHeightCss() {
+  function setStickyHeaderOffsets() {
     var bar = document.querySelector('[data-filter-bar]');
-    if (!bar) return;
+    var bannerRow = document.querySelector('[data-untested-banner-row]');
+    var filterH = bar ? bar.offsetHeight : 0;
+    var bannerH =
+      bannerRow && !bannerRow.hidden ? bannerRow.offsetHeight : 0;
     document.documentElement.style.setProperty(
       '--filter-bar-height',
-      bar.offsetHeight + 'px'
+      filterH + 'px'
+    );
+    document.documentElement.style.setProperty(
+      '--col-head-sticky-top',
+      filterH + bannerH + 'px'
     );
   }
 
@@ -217,7 +221,16 @@
     first.textContent = 'Select a product \u25be';
     selectEl.appendChild(first);
 
+    var hardDividerInserted = false;
     data.vendors.forEach(function (vendor) {
+      if (vendor.structure === 'hard-sided' && !hardDividerInserted) {
+        var divider = document.createElement('option');
+        divider.disabled = true;
+        divider.value = '';
+        divider.textContent = '\u2014 Hard-sided \u2014';
+        selectEl.appendChild(divider);
+        hardDividerInserted = true;
+      }
       var group = document.createElement('optgroup');
       group.label = vendor.name;
       vendor.products.forEach(function (p) {
@@ -463,7 +476,7 @@
       el.addEventListener('input', onFilterInputChange);
     });
 
-    setFilterBarHeightCss();
+    setStickyHeaderOffsets();
     applyFilterState();
 
     var sharedPopover = document.getElementById('vpc-info-popover');
@@ -510,9 +523,9 @@
       }
     }
 
-    function syncUntestedFootnote() {
-      var footnote = document.querySelector('[data-untested-footnote]');
-      if (!footnote) return;
+    function syncUntestedBanner() {
+      var bannerRow = document.querySelector('[data-untested-banner-row]');
+      if (!bannerRow) return;
       var hasUntested = false;
       for (var i = 0; i < 5; i++) {
         var sel = document.querySelector('[data-product-select="' + i + '"]');
@@ -524,10 +537,11 @@
         }
       }
       if (hasUntested) {
-        footnote.removeAttribute('hidden');
+        bannerRow.removeAttribute('hidden');
       } else {
-        footnote.setAttribute('hidden', '');
+        bannerRow.setAttribute('hidden', '');
       }
+      setStickyHeaderOffsets();
     }
 
     function columnShouldGrey(colIndex) {
@@ -568,44 +582,32 @@
 
     function syncColumnHeaderIcons(colIndex) {
       var infoBtn = document.querySelector('[data-info-trigger="' + colIndex + '"]');
-      var untestedBtn = document.querySelector(
-        '[data-untested-trigger="' + colIndex + '"]'
-      );
       var sel = document.querySelector('[data-product-select="' + colIndex + '"]');
-      if (!infoBtn || !untestedBtn || !sel) return;
+      if (!infoBtn || !sel) return;
       var pid = sel.value;
       if (!pid) {
-        if (openTrigger === infoBtn || openTrigger === untestedBtn) {
+        if (openTrigger === infoBtn) {
           closePopover();
         }
         infoBtn.setAttribute('hidden', '');
-        untestedBtn.setAttribute('hidden', '');
         return;
       }
       var ctx = findProductContext(data, pid);
       if (!ctx) {
-        if (openTrigger === infoBtn || openTrigger === untestedBtn) {
+        if (openTrigger === infoBtn) {
           closePopover();
         }
         infoBtn.setAttribute('hidden', '');
-        untestedBtn.setAttribute('hidden', '');
         return;
       }
       var info = productInfoText(ctx.product);
       if (info) {
-        if (openTrigger === untestedBtn) closePopover();
         infoBtn.removeAttribute('hidden');
-        untestedBtn.setAttribute('hidden', '');
-      } else if (ctx.product.tested === false) {
-        if (openTrigger === infoBtn) closePopover();
-        infoBtn.setAttribute('hidden', '');
-        untestedBtn.removeAttribute('hidden');
       } else {
-        if (openTrigger === infoBtn || openTrigger === untestedBtn) {
+        if (openTrigger === infoBtn) {
           closePopover();
         }
         infoBtn.setAttribute('hidden', '');
-        untestedBtn.setAttribute('hidden', '');
       }
     }
 
@@ -628,18 +630,6 @@
         });
       });
 
-      document.querySelectorAll('[data-untested-trigger]').forEach(function (btn) {
-        btn.addEventListener('click', function (ev) {
-          ev.preventDefault();
-          togglePopover(btn, UNTESTED_POPOVER_TEXT);
-          if (!sharedPopover.hidden) {
-            window.requestAnimationFrame(function () {
-              setPopoverPosition(sharedPopover, btn);
-            });
-          }
-        });
-      });
-
       document.addEventListener(
         'mousedown',
         function (ev) {
@@ -647,14 +637,13 @@
           var t = ev.target;
           if (sharedPopover.contains(t)) return;
           if (t && t.closest && t.closest('[data-info-trigger]')) return;
-          if (t && t.closest && t.closest('[data-untested-trigger]')) return;
           closePopover();
         },
         true
       );
 
       window.addEventListener('resize', function () {
-        setFilterBarHeightCss();
+        setStickyHeaderOffsets();
         if (!sharedPopover.hidden && openTrigger) {
           setPopoverPosition(sharedPopover, openTrigger);
         }
@@ -670,6 +659,10 @@
         },
         { capture: true, passive: true }
       );
+    } else {
+      window.addEventListener('resize', function () {
+        setStickyHeaderOffsets();
+      });
     }
 
     selects.forEach(function (sel) {
@@ -684,7 +677,7 @@
           fillColumn(idx, pid, data);
         }
         syncColumnHeaderIcons(idx);
-        syncUntestedFootnote();
+        syncUntestedBanner();
         syncColumnGreyState(idx);
       });
     });
@@ -692,7 +685,7 @@
     for (var ci = 0; ci < 5; ci++) {
       syncColumnHeaderIcons(ci);
     }
-    syncUntestedFootnote();
+    syncUntestedBanner();
   }
 
   function initHelp() {

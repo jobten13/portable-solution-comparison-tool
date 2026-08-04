@@ -12,6 +12,7 @@
   --pill-bg: #e8e9ec;
   --shadow: 0 1px 3px rgba(26, 26, 24, 0.06);
   --filter-bar-height: 0px;
+  --col-head-sticky-top: 0px;
 }
 
 *,
@@ -156,7 +157,7 @@ body {
   vertical-align: top;
   padding: 0.75rem 0.65rem 1.05rem 0;
   position: sticky;
-  top: var(--filter-bar-height);
+  top: var(--col-head-sticky-top);
   z-index: 10;
   background: var(--header-tint);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
@@ -169,7 +170,7 @@ body {
   font-weight: 400;
   padding: 0.75rem 0.65rem 1.05rem 0.65rem;
   position: sticky;
-  top: var(--filter-bar-height);
+  top: var(--col-head-sticky-top);
   z-index: 10;
   background: var(--header-tint);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
@@ -301,36 +302,6 @@ td.value-cell.is-filter-nonconforming {
   outline-offset: 1px;
 }
 
-.untested-trigger {
-  flex-shrink: 0;
-  width: 1.75rem;
-  height: 1.75rem;
-  padding: 0;
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  background: var(--accent-soft);
-  color: var(--accent);
-  font-size: 0.85rem;
-  line-height: 1;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.untested-trigger[hidden] {
-  display: none;
-}
-
-.untested-trigger:hover {
-  background: #dde0e5;
-}
-
-.untested-trigger:focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: 1px;
-}
-
 .spec-label-cell {
   padding: 0.71875rem 0.65rem 0.71875rem 0;
   text-align: left;
@@ -457,16 +428,31 @@ td.value-cell.is-filter-nonconforming {
   line-height: 1.5;
 }
 
-.footnote {
-  max-width: 1100px;
-  margin: 0.65rem auto 0;
-  padding: 0 0.875rem;
-  font-family: "DM Sans", system-ui, sans-serif;
-  font-size: 0.8rem;
+.untested-banner-row[hidden] {
+  display: none;
+}
+
+.untested-banner-cell {
+  position: sticky;
+  top: var(--filter-bar-height);
+  z-index: 11;
+  padding: 0.85rem 1rem;
+  text-align: center;
   font-weight: 400;
-  color: var(--text-muted);
-  text-align: left;
-  line-height: 1.5;
+  background: var(--header-tint);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  border-bottom: 1px solid var(--border);
+}
+
+.untested-banner {
+  margin: 0 auto;
+  max-width: 52rem;
+  font-family: "DM Sans", system-ui, sans-serif;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--text);
+  line-height: 1.45;
+  text-align: center;
 }
 
 /* —— Help overlay (isolated; do not share with .popover / table controls) —— */
@@ -573,8 +559,7 @@ td.value-cell.is-filter-nonconforming {
   color: var(--text-muted);
 }
 
-.help-illus-info,
-.help-illus-untested {
+.help-illus-info {
   display: inline-flex;
   align-items: center;
   justify-content: center;
