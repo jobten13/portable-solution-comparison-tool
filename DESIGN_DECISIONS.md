@@ -50,12 +50,10 @@ Decisions made during planning that shaped the tool. Captured here so the trail 
 
 Unresolved PSC ↔ individual-source conflicts / anomalies (do not resolve in data without vendor confirmation):
 
-1. **GateKeeper 2360 setup personnel:** PSC `60 min w/ 12 people`; `SW-2360.pdf` Total Set-Up Time `60 min / 6 personnel`.
-2. **GateKeeper 2342 setup:** PSC `60 min w/ 12 people`; `SW-2342_Shelter.pdf` Total Set-Up Time `50 min / 6 personnel`.
-3. **ZUMRO External Airlock interior vs exterior:** PSC interior `10x10` authored as `100 sq ft`; ceiling exterior from PSC/diagram inches is `88 sq ft (8' × 11')`—interior larger than exterior envelope.
-4. **Quick Halt bed capacity:** PSC lists a single `2–4` for “Quick Halt 402 and 403” combined; both `hdt-402` and `hdt-403` currently use that figure until vendor confirms per-model beds.
-5. **Quick Halt setup:** PSC `90 seconds, 2 people`; `HDT_Quick-Halt_TAC_Shelter_08.pdf` Set-up `2–5 minutes` (402) / `3–6 minutes` (403), 2 personnel.
-6. **3236A Airbeam setup:** PSC `40 min with 8 people`; `HDT_32SeriesAirBeam_17.pdf` Set-Up `30 – 40 minutes` / `6 each`.
+1. **ZUMRO External Airlock interior vs exterior:** PSC interior `10x10` authored as `100 sq ft`; ceiling exterior from PSC/diagram inches is `88 sq ft (8' × 11')`—interior larger than exterior envelope.
+2. **Quick Halt bed capacity:** PSC lists a single `2–4` for “Quick Halt 402 and 403” combined; both `hdt-402` and `hdt-403` currently use that figure until vendor confirms per-model beds.
+3. **Quick Halt setup:** PSC `90 seconds, 2 people`; `HDT_Quick-Halt_TAC_Shelter_08.pdf` Set-up `2–5 minutes` (402) / `3–6 minutes` (403), 2 personnel.
+4. **3236A Airbeam setup:** PSC `40 min with 8 people`; `HDT_32SeriesAirBeam_17.pdf` Set-Up `30 – 40 minutes` / `6 each`.
 
 ## Parked / future work
 
