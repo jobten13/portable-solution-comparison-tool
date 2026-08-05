@@ -46,6 +46,7 @@
         logo: 'logos/hdt.png',
         products: [
           { id: 'hdt-305', name: 'Base-X 305', type: 'shelter' },
+          { id: 'hdt-505', name: 'Base-X 505', type: 'shelter', tested: false },
           {
             id: 'hdt-8d36',
             name: 'Base-X 8D36',
@@ -53,6 +54,9 @@
             infoText:
               'HDT does not produce a small connector. The 8D36 can serve a connector role, but is sized as a full shelter and is listed as such.',
           },
+          { id: 'hdt-402', name: 'Quick Halt 402', type: 'shelter', tested: false },
+          { id: 'hdt-403', name: 'Quick Halt 403', type: 'shelter', tested: false },
+          { id: 'hdt-3236a', name: '3236A Airbeam', type: 'shelter', tested: false },
         ],
       },
       {
@@ -337,6 +341,25 @@
           intSqFt: 450,
         },
       },
+      'hdt-505': {
+        bedCapacity: '16',
+        extDims: "650 sq ft (25' × 26')",
+        intDims: '625 sq ft',
+        wind: '55 mph sustained for one hour, 65 mph gust for 10min',
+        snow: '10 lbs per sq ft',
+        fire: 'CSFM 13115 Flame Retardant Fabric Registration',
+        setup: '20 min with 6 people',
+        ground:
+          'Hard packed level ground with good drainage is preferred. Can also be setup on asphalt or concrete with add on hard surface anchoring system.',
+        lifespan: '10+ years',
+        repair:
+          'Each shelter comes with repair kit for typical field repairs. Parts can be ordered as needed.',
+        filter: {
+          bedCapacity: 16,
+          extSqFt: 650,
+          intSqFt: 625,
+        },
+      },
       'hdt-8d36': {
         bedCapacity: '18',
         extDims: '~1184 sq ft (Dome)',
@@ -354,6 +377,63 @@
           bedCapacity: 18,
           extSqFt: 935,
           intSqFt: 935,
+        },
+      },
+      'hdt-402': {
+        bedCapacity: '2 to 4',
+        extDims: "180 sq ft (15' × 12')",
+        intDims: '180 sq ft',
+        wind: '55 mph sustained for one hour, 65 mph gust for 10min',
+        snow: '10 lbs per sq ft',
+        fire: 'CSFM 13115 Flame Retardant Fabric Registration',
+        setup: '90 seconds, 2 people',
+        ground:
+          'Hard packed level ground with good drainage is preferred. Can also be setup on asphalt or concrete with add on hard surface anchoring system.',
+        lifespan: '10+ years',
+        repair:
+          'Each shelter comes with repair kit for typical field repairs. Parts can be ordered as needed.',
+        filter: {
+          bedCapacity: { min: 2, max: 4 },
+          extSqFt: 180,
+          intSqFt: 180,
+        },
+      },
+      'hdt-403': {
+        bedCapacity: '2 to 4',
+        extDims: "270 sq ft (15' × 18')",
+        intDims: '270 sq ft',
+        wind: '55 mph sustained for one hour, 65 mph gust for 10min',
+        snow: '10 lbs per sq ft',
+        fire: 'CSFM 13115 Flame Retardant Fabric Registration',
+        setup: '90 seconds, 2 people',
+        ground:
+          'Hard packed level ground with good drainage is preferred. Can also be setup on asphalt or concrete with add on hard surface anchoring system.',
+        lifespan: '10+ years',
+        repair:
+          'Each shelter comes with repair kit for typical field repairs. Parts can be ordered as needed.',
+        filter: {
+          bedCapacity: { min: 2, max: 4 },
+          extSqFt: 270,
+          intSqFt: 270,
+        },
+      },
+      'hdt-3236a': {
+        bedCapacity: '50',
+        extDims: '~2730 sq ft (Tapered-end rectangle)',
+        intDims: '1422 sq ft',
+        wind: '55 mph sustained for one hour, 65 mph gust for 10min',
+        snow: '10 lbs per sq ft',
+        fire: 'CSFM 13115 Flame Retardant Fabric Registration',
+        setup: '40 min with 8 people',
+        ground:
+          'Hard packed level ground with good drainage is preferred. Can also be setup on asphalt or concrete with add on hard surface anchoring system.',
+        lifespan: '10+ years',
+        repair:
+          'Each shelter comes with repair kit for typical field repairs. Parts can be ordered as needed.',
+        filter: {
+          bedCapacity: 50,
+          extSqFt: 2730,
+          intSqFt: 1422,
         },
       },
       'ws-gk20': {

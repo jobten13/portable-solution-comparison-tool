@@ -44,6 +44,8 @@ Decisions made during planning that shaped the tool. Captured here so the trail 
 
 21. **Western Shelter / ZUMRO shape families (2026 additions).** GateKeeper 2342 and 2360 are clipped-corner rectangles like GK-1935: exterior uses `~N sq ft (Clipped-corner rectangle)` from the ceiling-rounded bounding box; interior uses the vendor sheet’s Square Footage with no tilde. Guardian 2032 and 3065 are Quonset/arched (BLU-MED XPH family): plain ceiling-rounded rectangle exterior, no tilde; **PSC-only** for both dimensions and specs until individual sheets exist (no per-product `infoText`). GK-20 (octagon) is unchanged. ZUMRO Model 900 exterior uses diagram width `32'9"` (PSC `32.9"` treated as a typo). External Airlock is a `connector` (`bedCapacity: null`).
 
+22. **HDT 3236A Airbeam tapered-end footprint.** Exterior uses `~N sq ft (Tapered-end rectangle)` from the ceiling-rounded diagram bounding box on `HDT_32SeriesAirBeam_17.pdf` (77'4" × 34'5" → 78' × 35' → 2730 sq ft)—same tilde + shape-note pattern as clipped-corner GateKeepers, without embedded L×W. Interior uses the vendor-stated Type A with-liner **Total useable area** `1422 sq ft` (no tilde). PSC’s `32' × 36' / 1400 sq ft` interior is superseded by the individual sheet for dimensions. Display name follows PSC literal “3236A Airbeam”; id `hdt-3236a`.
+
 ## Vendor verification backlog
 
 Unresolved PSC ↔ individual-source conflicts / anomalies (do not resolve in data without vendor confirmation):
@@ -51,6 +53,9 @@ Unresolved PSC ↔ individual-source conflicts / anomalies (do not resolve in da
 1. **GateKeeper 2360 setup personnel:** PSC `60 min w/ 12 people`; `SW-2360.pdf` Total Set-Up Time `60 min / 6 personnel`.
 2. **GateKeeper 2342 setup:** PSC `60 min w/ 12 people`; `SW-2342_Shelter.pdf` Total Set-Up Time `50 min / 6 personnel`.
 3. **ZUMRO External Airlock interior vs exterior:** PSC interior `10x10` authored as `100 sq ft`; ceiling exterior from PSC/diagram inches is `88 sq ft (8' × 11')`—interior larger than exterior envelope.
+4. **Quick Halt bed capacity:** PSC lists a single `2–4` for “Quick Halt 402 and 403” combined; both `hdt-402` and `hdt-403` currently use that figure until vendor confirms per-model beds.
+5. **Quick Halt setup:** PSC `90 seconds, 2 people`; `HDT_Quick-Halt_TAC_Shelter_08.pdf` Set-up `2–5 minutes` (402) / `3–6 minutes` (403), 2 personnel.
+6. **3236A Airbeam setup:** PSC `40 min with 8 people`; `HDT_32SeriesAirBeam_17.pdf` Set-Up `30 – 40 minutes` / `6 each`.
 
 ## Parked / future work
 
