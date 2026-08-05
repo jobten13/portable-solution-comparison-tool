@@ -18,7 +18,7 @@ Open `index.html` in a browser (double-click or any static file server). No buil
 - **Sticky header:** the filter bar sticks at the top of the viewport; the untested banner (when visible) and the dropdown/logo row stick just below it on scroll.
 - **Row pinning:** pin a spec row to move it to the top of the table for the session (unpin to restore default order).
 - **Product notes:** ⓘ appears beside the vendor logo when the selected product has an `infoText` field (click to open/close the shared popover), including when that product is also untested.
-- **Untested products:** products not independently tested by UC Davis show ` *` after the name in the dropdown. When any selected column is untested, a sticky header banner states: *Indicates products included in the Portable Solution Catalogue, but not independently tested by UC Davis during any IMPACTS project events or exercises.*
+- **Untested products:** products not independently tested by UC Davis show ` *` after the name in the dropdown. When any selected column is untested, a sticky header banner states: *Indicates products included in the Portable Solution Catalog, but not independently tested by UC Davis during any IMPACTS project events or exercises.*
 - **Scope:** vestibules and multi-bed configuration rows are out of scope for v1 (see [DESIGN_DECISIONS.md](DESIGN_DECISIONS.md)).
 
 ## File roles

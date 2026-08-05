@@ -123,7 +123,7 @@
             type: 'shelter',
             tested: false,
             infoText:
-              'Per-unit interior floorspace not stated in the Portable Solution Catalogue; inferred from unit footprint.',
+              'Per-unit interior floorspace not stated in the Portable Solution Catalog; inferred from unit footprint.',
           },
           {
             id: 'wilscot-staff',
@@ -131,7 +131,7 @@
             type: 'shelter',
             tested: false,
             infoText:
-              'Per-unit interior floorspace not stated in the Portable Solution Catalogue; inferred from unit footprint.',
+              'Per-unit interior floorspace not stated in the Portable Solution Catalog; inferred from unit footprint.',
           },
         ],
       },
