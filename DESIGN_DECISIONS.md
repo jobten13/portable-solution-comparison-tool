@@ -16,7 +16,7 @@ Decisions made during planning that shaped the tool. Captured here so the trail 
 
 7. **Desktop-only target for v1.** No mobile-responsive work. Tablet landscape will work via natural layout.
 
-8. **Hard separation from the VPC Mapping Tool.** Separate repo, separate files, no shared code or data. Shared *facts* (a product's real-world dimensions) are fine — they're just reality.
+8. **Hard separation from the Portable Solution Site Mapping Tool.** Separate repo, separate files, no shared code or data. Shared *facts* (a product's real-world dimensions) are fine — they're just reality.
 
 9. **Bed capacity populated in v1.** All bedCapacity values are now populated strings. Shelter products show a numeric value or range; connector products with null bedCapacity render as N/A via the type-based rule. GK-20 is typed as a shelter but its bedCapacity is set to the string "N/A" because it serves an ancillary/connector role rather than patient care.
 
