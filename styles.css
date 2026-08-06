@@ -111,6 +111,22 @@ body {
   line-height: 1;
 }
 
+.build-list-badge.is-pulsing {
+  animation: build-list-badge-pulse 0.45s ease-out;
+}
+
+@keyframes build-list-badge-pulse {
+  0% {
+    transform: scale(1);
+  }
+  40% {
+    transform: scale(1.28);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
 .build-list-trigger[aria-disabled="true"] {
   cursor: default;
   opacity: 0.85;
@@ -327,7 +343,8 @@ td.value-cell.is-filter-nonconforming {
   font-weight: 700;
 }
 
-.info-trigger {
+.info-trigger,
+.build-list-quick-add {
   flex-shrink: 0;
   width: 1.75rem;
   height: 1.75rem;
@@ -344,17 +361,25 @@ td.value-cell.is-filter-nonconforming {
   justify-content: center;
 }
 
-.info-trigger[hidden] {
+.info-trigger[hidden],
+.build-list-quick-add[hidden] {
   display: none;
 }
 
-.info-trigger:hover {
+.info-trigger:hover,
+.build-list-quick-add:hover {
   background: #dde0e5;
 }
 
-.info-trigger:focus-visible {
+.info-trigger:focus-visible,
+.build-list-quick-add:focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 1px;
+}
+
+.build-list-quick-add.is-qty-flash {
+  font-size: 0.7rem;
+  font-weight: 700;
 }
 
 .spec-label-cell {

@@ -1,6 +1,10 @@
 (function () {
   'use strict';
 
+  /* Set by initBuildList; Compare calls this to add without reading Build List state.
+     Returns the new quantity (number) on success, or null on failure. */
+  var buildListQuickAdd = null;
+
   function productInfoText(product) {
     if (
       product &&
@@ -582,17 +586,41 @@
 
     function syncColumnHeaderIcons(colIndex) {
       var infoBtn = document.querySelector('[data-info-trigger="' + colIndex + '"]');
+      var quickAddBtn = document.querySelector(
+        '[data-build-list-quick-add="' + colIndex + '"]'
+      );
       var sel = document.querySelector('[data-product-select="' + colIndex + '"]');
-      if (!infoBtn || !sel) return;
+      if (!sel) return;
       var pid = sel.value;
+
       if (!pid) {
-        if (openTrigger === infoBtn) {
-          closePopover();
+        if (infoBtn) {
+          if (openTrigger === infoBtn) {
+            closePopover();
+          }
+          infoBtn.setAttribute('hidden', '');
         }
-        infoBtn.setAttribute('hidden', '');
+        if (quickAddBtn) {
+          clearQuickAddFlash(quickAddBtn);
+          quickAddBtn.setAttribute('hidden', '');
+          quickAddBtn.setAttribute('aria-label', 'Add to Build List');
+        }
         return;
       }
+
       var ctx = findProductContext(data, pid);
+
+      if (quickAddBtn) {
+        quickAddBtn.removeAttribute('hidden');
+        var productName =
+          ctx && ctx.product && ctx.product.name ? ctx.product.name : 'product';
+        quickAddBtn.setAttribute(
+          'aria-label',
+          'Add ' + productName + ' to Build List'
+        );
+      }
+
+      if (!infoBtn) return;
       if (!ctx) {
         if (openTrigger === infoBtn) {
           closePopover();
@@ -610,6 +638,49 @@
         infoBtn.setAttribute('hidden', '');
       }
     }
+
+    var quickAddFlashTimers = {};
+
+    function clearQuickAddFlash(btn) {
+      if (!btn) return;
+      var col = btn.getAttribute('data-build-list-quick-add');
+      if (col != null && quickAddFlashTimers[col]) {
+        clearTimeout(quickAddFlashTimers[col]);
+        delete quickAddFlashTimers[col];
+      }
+      btn.textContent = '+';
+      btn.classList.remove('is-qty-flash');
+    }
+
+    function flashQuickAddQty(btn, qty) {
+      if (!btn || typeof qty !== 'number') return;
+      var col = btn.getAttribute('data-build-list-quick-add');
+      if (col != null && quickAddFlashTimers[col]) {
+        clearTimeout(quickAddFlashTimers[col]);
+      }
+      btn.textContent = '\u00d7' + qty;
+      btn.classList.add('is-qty-flash');
+      if (col != null) {
+        quickAddFlashTimers[col] = setTimeout(function () {
+          btn.textContent = '+';
+          btn.classList.remove('is-qty-flash');
+          delete quickAddFlashTimers[col];
+        }, 900);
+      }
+    }
+
+    document.querySelectorAll('[data-build-list-quick-add]').forEach(function (btn) {
+      btn.addEventListener('click', function (ev) {
+        ev.preventDefault();
+        var col = btn.getAttribute('data-build-list-quick-add');
+        var sel = document.querySelector('[data-product-select="' + col + '"]');
+        if (!sel || !sel.value || typeof buildListQuickAdd !== 'function') return;
+        var newQty = buildListQuickAdd(sel.value);
+        if (typeof newQty === 'number') {
+          flashQuickAddQty(btn, newQty);
+        }
+      });
+    });
 
     if (sharedPopover) {
       document.querySelectorAll('[data-info-trigger]').forEach(function (btn) {
@@ -864,6 +935,7 @@
       if (count === 0) {
         badge.setAttribute('hidden', '');
         badge.textContent = '0';
+        badge.classList.remove('is-pulsing');
         trigger.setAttribute('aria-label', 'Build List');
       } else {
         badge.removeAttribute('hidden');
@@ -878,9 +950,16 @@
       }
     }
 
+    function pulseBadge() {
+      if (!badge || badge.hasAttribute('hidden')) return;
+      badge.classList.remove('is-pulsing');
+      void badge.offsetWidth;
+      badge.classList.add('is-pulsing');
+    }
+
     function addOrIncrement(productId, qty) {
       var n = clampBuildListQty(qty);
-      if (!productId || !data.specs[productId]) return;
+      if (!productId || !data.specs[productId]) return null;
       if (qtyById[productId] == null) {
         qtyById[productId] = n;
         order.push(productId);
@@ -888,7 +967,14 @@
         qtyById[productId] = clampBuildListQty(qtyById[productId] + n);
       }
       renderBuildList();
+      pulseBadge();
+      return qtyById[productId];
     }
+
+    /* Thin Compare→Build List hook: returns new qty only; no state exposed. */
+    buildListQuickAdd = function (productId) {
+      return addOrIncrement(productId, 1);
+    };
 
     function setQuantity(productId, qty) {
       if (qtyById[productId] == null) return;
