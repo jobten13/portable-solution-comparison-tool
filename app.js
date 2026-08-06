@@ -412,7 +412,6 @@
         var pinBtn = document.createElement('button');
         pinBtn.type = 'button';
         pinBtn.className = 'pin-trigger' + (isPinned ? ' is-pinned' : '');
-        pinBtn.setAttribute('data-pin-trigger', '');
         pinBtn.setAttribute('data-spec-key', row.key);
         pinBtn.setAttribute('aria-pressed', isPinned ? 'true' : 'false');
         pinBtn.setAttribute('aria-label', isPinned ? 'Unpin row' : 'Pin row');
