@@ -375,7 +375,7 @@
           'Each shelter comes with repair kit for typical field repairs. Parts can be ordered as needed.',
         filter: {
           bedCapacity: 18,
-          extSqFt: 935,
+          extSqFt: 1184,
           intSqFt: 935,
         },
       },
@@ -648,7 +648,7 @@
         repair: 'Annual Inspections & Maintenance as needed. ZUMRO replacement parts available through sales rep, online or website',
         filter: {
           bedCapacity: { excluded: true },
-          extSqFt: 570,
+          extSqFt: 600,
           intSqFt: 454,
         },
       },
