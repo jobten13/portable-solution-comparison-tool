@@ -739,13 +739,367 @@
     });
   }
 
+  function clampBuildListQty(n) {
+    if (typeof n !== 'number' || isNaN(n)) return 1;
+    var q = Math.floor(n);
+    if (q < 1) return 1;
+    if (q > 999) return 999;
+    return q;
+  }
+
+  function lineBedContribution(filterBed, qty) {
+    if (
+      filterBed == null ||
+      isFilterFieldExcluded(filterBed)
+    ) {
+      return { min: 0, max: 0, lineDisplay: '—' };
+    }
+    if (typeof filterBed === 'number') {
+      var point = filterBed * qty;
+      return {
+        min: point,
+        max: point,
+        lineDisplay: String(point),
+      };
+    }
+    if (
+      filterBed &&
+      typeof filterBed.min === 'number' &&
+      typeof filterBed.max === 'number'
+    ) {
+      var lo = filterBed.min * qty;
+      var hi = filterBed.max * qty;
+      return {
+        min: lo,
+        max: hi,
+        lineDisplay: lo === hi ? String(lo) : lo + '\u2013' + hi,
+      };
+    }
+    return { min: 0, max: 0, lineDisplay: '—' };
+  }
+
+  function formatBedTotal(min, max) {
+    if (min === max) return String(min);
+    return min + '\u2013' + max;
+  }
+
+  function formatIntSqFt(n) {
+    return String(n) + ' sq ft';
+  }
+
+  function formatPrintStamp(d) {
+    try {
+      return (
+        'Printed ' +
+        d.toLocaleString(undefined, {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+          hour: 'numeric',
+          minute: '2-digit',
+        })
+      );
+    } catch (err) {
+      return 'Printed ' + d.toISOString();
+    }
+  }
+
+  function initBuildList() {
+    var data = window.VPC_COMPARISON_DATA;
+    if (!data || !data.vendors || !data.specs) return;
+
+    var compareView = document.querySelector('[data-view="compare"]');
+    var buildListView = document.querySelector('[data-view="build-list"]');
+    var trigger = document.querySelector('[data-build-list-trigger]');
+    var badge = document.querySelector('[data-build-list-badge]');
+    var backBtn = document.querySelector('[data-build-list-back]');
+    var printBtn = document.querySelector('[data-build-list-print]');
+    var selectEl = document.querySelector('[data-build-list-select]');
+    var addQtyEl = document.querySelector('[data-build-list-add-qty]');
+    var addBtn = document.querySelector('[data-build-list-add]');
+    var emptyEl = document.querySelector('[data-build-list-empty]');
+    var tableWrap = document.querySelector('[data-build-list-table-wrap]');
+    var tbody = document.querySelector('[data-build-list-body]');
+    var totalsEl = document.querySelector('[data-build-list-totals]');
+    var totalBedsEl = document.querySelector('[data-build-list-total-beds]');
+    var totalIntEl = document.querySelector('[data-build-list-total-int]');
+    var printRegion = document.querySelector('[data-build-list-print-region]');
+    var printStamp = document.querySelector('[data-build-list-print-stamp]');
+    var printBody = document.querySelector('[data-build-list-print-body]');
+    var printTotals = document.querySelector('[data-build-list-print-totals]');
+
+    if (!compareView || !buildListView || !trigger || !selectEl || !tbody) {
+      return;
+    }
+
+    var qtyById = {};
+    var order = [];
+
+    buildProductSelect(selectEl, data);
+
+    function getActiveView() {
+      return document.body.getAttribute('data-active-view') || 'compare';
+    }
+
+    function setActiveView(name) {
+      if (name !== 'compare' && name !== 'build-list') return;
+      document.body.setAttribute('data-active-view', name);
+      if (name === 'compare') {
+        compareView.removeAttribute('hidden');
+        buildListView.setAttribute('hidden', '');
+        trigger.removeAttribute('aria-disabled');
+        trigger.setAttribute('aria-label', 'Build List');
+      } else {
+        compareView.setAttribute('hidden', '');
+        buildListView.removeAttribute('hidden');
+        trigger.setAttribute('aria-disabled', 'true');
+        trigger.setAttribute('aria-label', 'Build List (current view)');
+      }
+      setStickyHeaderOffsets();
+    }
+
+    function syncBadge() {
+      if (!badge) return;
+      var count = order.length;
+      if (count === 0) {
+        badge.setAttribute('hidden', '');
+        badge.textContent = '0';
+        trigger.setAttribute('aria-label', 'Build List');
+      } else {
+        badge.removeAttribute('hidden');
+        badge.textContent = String(count);
+        trigger.setAttribute(
+          'aria-label',
+          'Build List, ' + count + (count === 1 ? ' item' : ' items')
+        );
+      }
+      if (getActiveView() === 'build-list') {
+        trigger.setAttribute('aria-label', 'Build List (current view)');
+      }
+    }
+
+    function addOrIncrement(productId, qty) {
+      var n = clampBuildListQty(qty);
+      if (!productId || !data.specs[productId]) return;
+      if (qtyById[productId] == null) {
+        qtyById[productId] = n;
+        order.push(productId);
+      } else {
+        qtyById[productId] = clampBuildListQty(qtyById[productId] + n);
+      }
+      renderBuildList();
+    }
+
+    function setQuantity(productId, qty) {
+      if (qtyById[productId] == null) return;
+      var n = clampBuildListQty(qty);
+      if (n < 1) {
+        removeLine(productId);
+        return;
+      }
+      qtyById[productId] = n;
+      renderBuildList();
+    }
+
+    function removeLine(productId) {
+      if (qtyById[productId] == null) return;
+      delete qtyById[productId];
+      var idx = order.indexOf(productId);
+      if (idx !== -1) order.splice(idx, 1);
+      renderBuildList();
+    }
+
+    function computeTotals() {
+      var bedMin = 0;
+      var bedMax = 0;
+      var intTotal = 0;
+      var i;
+      for (i = 0; i < order.length; i++) {
+        var id = order[i];
+        var q = qtyById[id];
+        var spec = data.specs[id];
+        if (!spec || !spec.filter) continue;
+        var beds = lineBedContribution(spec.filter.bedCapacity, q);
+        bedMin += beds.min;
+        bedMax += beds.max;
+        var intSq =
+          typeof spec.filter.intSqFt === 'number' ? spec.filter.intSqFt : 0;
+        intTotal += intSq * q;
+      }
+      return { bedMin: bedMin, bedMax: bedMax, intTotal: intTotal };
+    }
+
+    function renderBuildList() {
+      syncBadge();
+      tbody.innerHTML = '';
+      if (printBody) printBody.innerHTML = '';
+
+      var isEmpty = order.length === 0;
+      if (emptyEl) {
+        if (isEmpty) emptyEl.removeAttribute('hidden');
+        else emptyEl.setAttribute('hidden', '');
+      }
+      if (tableWrap) {
+        if (isEmpty) tableWrap.setAttribute('hidden', '');
+        else tableWrap.removeAttribute('hidden');
+      }
+      if (totalsEl) {
+        if (isEmpty) totalsEl.setAttribute('hidden', '');
+        else totalsEl.removeAttribute('hidden');
+      }
+
+      var i;
+      for (i = 0; i < order.length; i++) {
+        (function (productId) {
+          var q = qtyById[productId];
+          var ctx = findProductContext(data, productId);
+          var spec = data.specs[productId] || {};
+          var filter = spec.filter || {};
+          var beds = lineBedContribution(filter.bedCapacity, q);
+          var intSq =
+            typeof filter.intSqFt === 'number' ? filter.intSqFt * q : 0;
+          var vendorName = ctx && ctx.vendor ? ctx.vendor.name : '';
+          var productName = ctx && ctx.product ? ctx.product.name : productId;
+          var untested = ctx && ctx.product && ctx.product.tested === false;
+          var label = vendorName
+            ? vendorName + ' \u2014 ' + productName
+            : productName;
+          if (untested) label += ' *';
+
+          var tr = document.createElement('tr');
+
+          var tdProd = document.createElement('td');
+          tdProd.className = 'build-list-product-cell';
+          tdProd.textContent = label;
+          tr.appendChild(tdProd);
+
+          var tdQty = document.createElement('td');
+          var qtyInput = document.createElement('input');
+          qtyInput.type = 'number';
+          qtyInput.className = 'build-list-line-qty';
+          qtyInput.min = '1';
+          qtyInput.max = '999';
+          qtyInput.step = '1';
+          qtyInput.value = String(q);
+          qtyInput.setAttribute('aria-label', 'Quantity for ' + label);
+          qtyInput.addEventListener('change', function () {
+            setQuantity(productId, parseFloat(qtyInput.value));
+          });
+          tdQty.appendChild(qtyInput);
+          tr.appendChild(tdQty);
+
+          var tdBeds = document.createElement('td');
+          tdBeds.textContent = beds.lineDisplay;
+          tr.appendChild(tdBeds);
+
+          var tdInt = document.createElement('td');
+          tdInt.textContent = formatIntSqFt(intSq);
+          tr.appendChild(tdInt);
+
+          var tdRemove = document.createElement('td');
+          var removeBtn = document.createElement('button');
+          removeBtn.type = 'button';
+          removeBtn.className = 'build-list-remove';
+          removeBtn.textContent = 'Remove';
+          removeBtn.setAttribute('aria-label', 'Remove ' + label);
+          removeBtn.addEventListener('click', function (ev) {
+            ev.preventDefault();
+            removeLine(productId);
+          });
+          tdRemove.appendChild(removeBtn);
+          tr.appendChild(tdRemove);
+
+          tbody.appendChild(tr);
+
+          if (printBody) {
+            var ptr = document.createElement('tr');
+            var cells = [label, String(q), beds.lineDisplay, formatIntSqFt(intSq)];
+            var c;
+            for (c = 0; c < cells.length; c++) {
+              var td = document.createElement('td');
+              td.textContent = cells[c];
+              ptr.appendChild(td);
+            }
+            printBody.appendChild(ptr);
+          }
+        })(order[i]);
+      }
+
+      var totals = computeTotals();
+      var bedsText = formatBedTotal(totals.bedMin, totals.bedMax);
+      var intText = formatIntSqFt(totals.intTotal);
+      if (totalBedsEl) totalBedsEl.textContent = isEmpty ? '\u2014' : bedsText;
+      if (totalIntEl) totalIntEl.textContent = isEmpty ? '\u2014' : intText;
+
+      if (printTotals) {
+        printTotals.innerHTML = '';
+        if (!isEmpty) {
+          var pBeds = document.createElement('p');
+          pBeds.textContent = 'Total beds: ' + bedsText;
+          var pInt = document.createElement('p');
+          pInt.textContent = 'Total interior floorspace: ' + intText;
+          printTotals.appendChild(pBeds);
+          printTotals.appendChild(pInt);
+        }
+      }
+
+      if (printStamp) {
+        printStamp.textContent = formatPrintStamp(new Date());
+      }
+    }
+
+    trigger.addEventListener('click', function (ev) {
+      ev.preventDefault();
+      if (getActiveView() === 'build-list') return;
+      setActiveView('build-list');
+    });
+
+    if (backBtn) {
+      backBtn.addEventListener('click', function (ev) {
+        ev.preventDefault();
+        setActiveView('compare');
+      });
+    }
+
+    if (printBtn) {
+      printBtn.addEventListener('click', function (ev) {
+        ev.preventDefault();
+        if (printStamp) {
+          printStamp.textContent = formatPrintStamp(new Date());
+        }
+        window.print();
+      });
+    }
+
+    if (addBtn) {
+      addBtn.addEventListener('click', function (ev) {
+        ev.preventDefault();
+        var pid = selectEl.value;
+        if (!pid) return;
+        var qty = clampBuildListQty(parseFloat(addQtyEl && addQtyEl.value));
+        addOrIncrement(pid, qty);
+        selectEl.value = '';
+        updateSelectSelectionClass(selectEl);
+        if (addQtyEl) addQtyEl.value = '1';
+      });
+    }
+
+    selectEl.addEventListener('change', function () {
+      updateSelectSelectionClass(selectEl);
+    });
+
+    renderBuildList();
+  }
+
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', function () {
       init();
       initHelp();
+      initBuildList();
     });
   } else {
     init();
     initHelp();
+    initBuildList();
   }
 })();

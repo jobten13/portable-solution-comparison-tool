@@ -9,120 +9,215 @@
   <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500;600&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
-<body>
+<body data-active-view="compare">
 
 <header class="page-header">
   <div class="page-header-inner">
     <h1 class="page-title">Portable Solution Comparison Tool</h1>
-    <button
-      type="button"
-      class="help-trigger"
-      aria-expanded="false"
-      aria-controls="vpc-help-overlay"
-    >Help</button>
+    <div class="header-actions">
+      <button
+        type="button"
+        class="help-trigger"
+        aria-expanded="false"
+        aria-controls="vpc-help-overlay"
+      >Help</button>
+      <button
+        type="button"
+        class="build-list-trigger"
+        data-build-list-trigger
+        aria-label="Build List"
+      >
+        Build List
+        <span class="build-list-badge" data-build-list-badge hidden>0</span>
+      </button>
+    </div>
   </div>
 </header>
 
 <main class="main" data-vpc-comparison>
-  <div class="filter-bar" data-filter-bar>
-    <div class="filter-bar-inner">
-      <label class="filter-field">
-        <span class="filter-label">Bed Capacity</span>
-        <input type="number" class="filter-input" data-filter-input="bedCapacity" step="1" placeholder="min beds">
-      </label>
-      <label class="filter-field">
-        <span class="filter-label">Internal Floorspace</span>
-        <input type="number" class="filter-input" data-filter-input="intSqFt" step="1" placeholder="min sq ft">
-      </label>
-      <label class="filter-field">
-        <span class="filter-label">External Footprint</span>
-        <input type="number" class="filter-input" data-filter-input="extSqFt" step="1" placeholder="max sq ft">
-      </label>
+  <div class="view-panel" data-view="compare">
+    <div class="filter-bar" data-filter-bar>
+      <div class="filter-bar-inner">
+        <label class="filter-field">
+          <span class="filter-label">Bed Capacity</span>
+          <input type="number" class="filter-input" data-filter-input="bedCapacity" step="1" placeholder="min beds">
+        </label>
+        <label class="filter-field">
+          <span class="filter-label">Internal Floorspace</span>
+          <input type="number" class="filter-input" data-filter-input="intSqFt" step="1" placeholder="min sq ft">
+        </label>
+        <label class="filter-field">
+          <span class="filter-label">External Footprint</span>
+          <input type="number" class="filter-input" data-filter-input="extSqFt" step="1" placeholder="max sq ft">
+        </label>
+      </div>
+    </div>
+    <div class="table-panel">
+      <table class="compare-table" data-compare-table>
+        <thead>
+          <tr class="untested-banner-row" data-untested-banner-row hidden>
+            <th class="untested-banner-cell" colspan="6" scope="colgroup">
+              <p class="untested-banner" data-untested-banner role="status">
+                * Indicates products included in the Portable Solution Catalog, but not independently tested by UC Davis during any IMPACTS project events or exercises.
+              </p>
+            </th>
+          </tr>
+          <tr>
+            <th class="corner-cell" scope="col"></th>
+            <th class="col-head" scope="col" data-col-head="0">
+              <div class="col-head-inner">
+                <div class="select-floater-host">
+                  <div class="select-anchor">
+                    <select class="product-select" data-product-select="0" aria-label="Product for column 1"></select>
+                  </div>
+                </div>
+                <div class="logo-trigger-wrap">
+                  <img class="vendor-logo" data-vendor-logo="0" alt="" hidden>
+                  <button type="button" class="info-trigger" data-info-trigger="0" aria-label="Product note" aria-expanded="false" aria-controls="vpc-info-popover" hidden>ⓘ</button>
+                </div>
+              </div>
+            </th>
+            <th class="col-head" scope="col" data-col-head="1">
+              <div class="col-head-inner">
+                <div class="select-floater-host">
+                  <div class="select-anchor">
+                    <select class="product-select" data-product-select="1" aria-label="Product for column 2"></select>
+                  </div>
+                </div>
+                <div class="logo-trigger-wrap">
+                  <img class="vendor-logo" data-vendor-logo="1" alt="" hidden>
+                  <button type="button" class="info-trigger" data-info-trigger="1" aria-label="Product note" aria-expanded="false" aria-controls="vpc-info-popover" hidden>ⓘ</button>
+                </div>
+              </div>
+            </th>
+            <th class="col-head" scope="col" data-col-head="2">
+              <div class="col-head-inner">
+                <div class="select-floater-host">
+                  <div class="select-anchor">
+                    <select class="product-select" data-product-select="2" aria-label="Product for column 3"></select>
+                  </div>
+                </div>
+                <div class="logo-trigger-wrap">
+                  <img class="vendor-logo" data-vendor-logo="2" alt="" hidden>
+                  <button type="button" class="info-trigger" data-info-trigger="2" aria-label="Product note" aria-expanded="false" aria-controls="vpc-info-popover" hidden>ⓘ</button>
+                </div>
+              </div>
+            </th>
+            <th class="col-head" scope="col" data-col-head="3">
+              <div class="col-head-inner">
+                <div class="select-floater-host">
+                  <div class="select-anchor">
+                    <select class="product-select" data-product-select="3" aria-label="Product for column 4"></select>
+                  </div>
+                </div>
+                <div class="logo-trigger-wrap">
+                  <img class="vendor-logo" data-vendor-logo="3" alt="" hidden>
+                  <button type="button" class="info-trigger" data-info-trigger="3" aria-label="Product note" aria-expanded="false" aria-controls="vpc-info-popover" hidden>ⓘ</button>
+                </div>
+              </div>
+            </th>
+            <th class="col-head" scope="col" data-col-head="4">
+              <div class="col-head-inner">
+                <div class="select-floater-host">
+                  <div class="select-anchor">
+                    <select class="product-select" data-product-select="4" aria-label="Product for column 5"></select>
+                  </div>
+                </div>
+                <div class="logo-trigger-wrap">
+                  <img class="vendor-logo" data-vendor-logo="4" alt="" hidden>
+                  <button type="button" class="info-trigger" data-info-trigger="4" aria-label="Product note" aria-expanded="false" aria-controls="vpc-info-popover" hidden>ⓘ</button>
+                </div>
+              </div>
+            </th>
+          </tr>
+        </thead>
+        <tbody data-spec-body>
+          <!-- Rows injected by app.js from specRows -->
+        </tbody>
+      </table>
     </div>
   </div>
-  <div class="table-panel">
-    <table class="compare-table" data-compare-table>
-      <thead>
-        <tr class="untested-banner-row" data-untested-banner-row hidden>
-          <th class="untested-banner-cell" colspan="6" scope="colgroup">
-            <p class="untested-banner" data-untested-banner role="status">
-              * Indicates products included in the Portable Solution Catalog, but not independently tested by UC Davis during any IMPACTS project events or exercises.
-            </p>
-          </th>
-        </tr>
-        <tr>
-          <th class="corner-cell" scope="col"></th>
-          <th class="col-head" scope="col" data-col-head="0">
-            <div class="col-head-inner">
-              <div class="select-floater-host">
-                <div class="select-anchor">
-                  <select class="product-select" data-product-select="0" aria-label="Product for column 1"></select>
-                </div>
-              </div>
-              <div class="logo-trigger-wrap">
-                <img class="vendor-logo" data-vendor-logo="0" alt="" hidden>
-                <button type="button" class="info-trigger" data-info-trigger="0" aria-label="Product note" aria-expanded="false" aria-controls="vpc-info-popover" hidden>ⓘ</button>
-              </div>
-            </div>
-          </th>
-          <th class="col-head" scope="col" data-col-head="1">
-            <div class="col-head-inner">
-              <div class="select-floater-host">
-                <div class="select-anchor">
-                  <select class="product-select" data-product-select="1" aria-label="Product for column 2"></select>
-                </div>
-              </div>
-              <div class="logo-trigger-wrap">
-                <img class="vendor-logo" data-vendor-logo="1" alt="" hidden>
-                <button type="button" class="info-trigger" data-info-trigger="1" aria-label="Product note" aria-expanded="false" aria-controls="vpc-info-popover" hidden>ⓘ</button>
-              </div>
-            </div>
-          </th>
-          <th class="col-head" scope="col" data-col-head="2">
-            <div class="col-head-inner">
-              <div class="select-floater-host">
-                <div class="select-anchor">
-                  <select class="product-select" data-product-select="2" aria-label="Product for column 3"></select>
-                </div>
-              </div>
-              <div class="logo-trigger-wrap">
-                <img class="vendor-logo" data-vendor-logo="2" alt="" hidden>
-                <button type="button" class="info-trigger" data-info-trigger="2" aria-label="Product note" aria-expanded="false" aria-controls="vpc-info-popover" hidden>ⓘ</button>
-              </div>
-            </div>
-          </th>
-          <th class="col-head" scope="col" data-col-head="3">
-            <div class="col-head-inner">
-              <div class="select-floater-host">
-                <div class="select-anchor">
-                  <select class="product-select" data-product-select="3" aria-label="Product for column 4"></select>
-                </div>
-              </div>
-              <div class="logo-trigger-wrap">
-                <img class="vendor-logo" data-vendor-logo="3" alt="" hidden>
-                <button type="button" class="info-trigger" data-info-trigger="3" aria-label="Product note" aria-expanded="false" aria-controls="vpc-info-popover" hidden>ⓘ</button>
-              </div>
-            </div>
-          </th>
-          <th class="col-head" scope="col" data-col-head="4">
-            <div class="col-head-inner">
-              <div class="select-floater-host">
-                <div class="select-anchor">
-                  <select class="product-select" data-product-select="4" aria-label="Product for column 5"></select>
-                </div>
-              </div>
-              <div class="logo-trigger-wrap">
-                <img class="vendor-logo" data-vendor-logo="4" alt="" hidden>
-                <button type="button" class="info-trigger" data-info-trigger="4" aria-label="Product note" aria-expanded="false" aria-controls="vpc-info-popover" hidden>ⓘ</button>
-              </div>
-            </div>
-          </th>
-        </tr>
-      </thead>
-      <tbody data-spec-body>
-        <!-- Rows injected by app.js from specRows -->
-      </tbody>
-    </table>
+
+  <div class="view-panel" data-view="build-list" hidden>
+    <div class="build-list-toolbar">
+      <button type="button" class="build-list-back" data-build-list-back>
+        Back to Compare
+      </button>
+      <button type="button" class="build-list-print" data-build-list-print>
+        Print
+      </button>
+    </div>
+
+    <div class="build-list-add-strip">
+      <label class="build-list-field">
+        <span class="build-list-field-label">Product</span>
+        <select class="product-select build-list-product-select" data-build-list-select aria-label="Product to add"></select>
+      </label>
+      <label class="build-list-field build-list-field-qty">
+        <span class="build-list-field-label">Quantity</span>
+        <input
+          type="number"
+          class="build-list-qty-input"
+          data-build-list-add-qty
+          min="1"
+          max="999"
+          step="1"
+          value="1"
+          aria-label="Quantity to add"
+        >
+      </label>
+      <button type="button" class="build-list-add-btn" data-build-list-add>
+        Add
+      </button>
+    </div>
+
+    <div class="build-list-empty" data-build-list-empty>
+      No products in this list yet.
+    </div>
+
+    <div class="build-list-table-wrap" data-build-list-table-wrap hidden>
+      <table class="build-list-table">
+        <thead>
+          <tr>
+            <th scope="col">Product</th>
+            <th scope="col">Qty</th>
+            <th scope="col">Beds</th>
+            <th scope="col">Interior floorspace</th>
+            <th scope="col"><span class="visually-hidden">Remove</span></th>
+          </tr>
+        </thead>
+        <tbody data-build-list-body></tbody>
+      </table>
+    </div>
+
+    <div class="build-list-totals" data-build-list-totals hidden>
+      <div class="build-list-total-row">
+        <span class="build-list-total-label">Total beds</span>
+        <span class="build-list-total-value" data-build-list-total-beds>—</span>
+      </div>
+      <div class="build-list-total-row">
+        <span class="build-list-total-label">Total interior floorspace</span>
+        <span class="build-list-total-value" data-build-list-total-int>—</span>
+      </div>
+    </div>
+
+    <!-- Same in-memory list; shown only when printing -->
+    <div class="build-list-print-region" data-build-list-print-region aria-hidden="true">
+      <h1 class="build-list-print-title">Build List</h1>
+      <p class="build-list-print-stamp" data-build-list-print-stamp></p>
+      <table class="build-list-print-table">
+        <thead>
+          <tr>
+            <th scope="col">Product</th>
+            <th scope="col">Qty</th>
+            <th scope="col">Beds</th>
+            <th scope="col">Interior floorspace</th>
+          </tr>
+        </thead>
+        <tbody data-build-list-print-body></tbody>
+      </table>
+      <div class="build-list-print-totals" data-build-list-print-totals></div>
+    </div>
   </div>
 </main>
 
@@ -186,6 +281,16 @@
             </svg>
           </span>
           <span class="help-illus-row-bar">Snow load</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="help-section">
+      <p class="help-line">Use Build List to total beds and floorspace across products</p>
+      <div class="help-graphic" aria-hidden="true">
+        <div class="help-illus-build-list">
+          <span class="help-illus-build-btn">Build List</span>
+          <span class="help-illus-build-badge">2</span>
         </div>
       </div>
     </div>
