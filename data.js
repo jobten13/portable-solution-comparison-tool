@@ -619,7 +619,7 @@
       'zumro-airlock': {
         bedCapacity: null,
         extDims: "88 sq ft (8' × 11')",
-        intDims: '100 sq ft',
+        intDims: '59 sq ft',
         wind: '50 mph w/ gusts to 60 mph',
         snow:
           '3.44 lbs. per square foot STATIC load (Roof pitch specifically designed for snow/rain removal)',
@@ -632,7 +632,7 @@
         filter: {
           bedCapacity: { excluded: true },
           extSqFt: 88,
-          intSqFt: 100,
+          intSqFt: 59,
         },
       },
       'zumro-quad': {

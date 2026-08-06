@@ -46,14 +46,15 @@ Decisions made during planning that shaped the tool. Captured here so the trail 
 
 22. **HDT 3236A Airbeam tapered-end footprint.** Exterior uses `~N sq ft (Tapered-end rectangle)` from the ceiling-rounded diagram bounding box on `HDT_32SeriesAirBeam_17.pdf` (77'4" × 34'5" → 78' × 35' → 2730 sq ft)—same tilde + shape-note pattern as clipped-corner GateKeepers, without embedded L×W. Interior uses the vendor-stated Type A with-liner **Total useable area** `1422 sq ft` (no tilde). PSC’s `32' × 36' / 1400 sq ft` interior is superseded by the individual sheet for dimensions. Display name follows PSC literal “3236A Airbeam”; id `hdt-3236a`.
 
+23. **ZUMRO External Airlock dimensions — mixed confirmation / open anomaly.** `zumro-airlock` currently uses `intDims` `59 sq ft` (filter `intSqFt: 59`) and `extDims` `88 sq ft (8' × 11')` (filter `extSqFt: 88`). **Interior is vendor-confirmed** via an individual spec sheet (`5'6" × 10'8"`). **Exterior is not vendor-confirmed:** `88 sq ft (8' × 11')` is an older figure from an earlier product diagram (ceiling-rounded from `128"×86"`); the vendor did not provide exterior dimensions, and **no further vendor contact will be made** on this item. The vendor also stated that PSC’s own interior `10x10` figure is **incorrect** and needs correction on their end—flag this for the eventual PSC-owner review list. **Ratio anomaly (unresolved):** every other ZUMRO product in `data.js` has an interior/exterior square-footage ratio of roughly 90–95% (e.g. `zumro-400` ~95%, `zumro-900` ~91%, `zumro-216` 90%). Airlock’s current figures (`59`/`88`) yield ~**67%**, well outside that pattern, which suggests the `88 sq ft` exterior may itself be inaccurate—but this cannot be resolved without further vendor input, which will not be pursued further at this time. Documented as an open, unresolved anomaly—not something to silently “correct.”
+
 ## Vendor verification backlog
 
-Unresolved PSC ↔ individual-source conflicts / anomalies (do not resolve in data without vendor confirmation):
+Unresolved PSC ↔ individual-source conflicts / anomalies (do not resolve in data without vendor confirmation). The items below have been **sent to the vendor and PSC lead** and are **pending response**:
 
-1. **ZUMRO External Airlock interior vs exterior:** PSC interior `10x10` authored as `100 sq ft`; ceiling exterior from PSC/diagram inches is `88 sq ft (8' × 11')`—interior larger than exterior envelope.
-2. **Quick Halt bed capacity:** PSC lists a single `2–4` for “Quick Halt 402 and 403” combined; both `hdt-402` and `hdt-403` currently use that figure until vendor confirms per-model beds.
-3. **Quick Halt setup:** PSC `90 seconds, 2 people`; `HDT_Quick-Halt_TAC_Shelter_08.pdf` Set-up `2–5 minutes` (402) / `3–6 minutes` (403), 2 personnel.
-4. **3236A Airbeam setup:** PSC `40 min with 8 people`; `HDT_32SeriesAirBeam_17.pdf` Set-Up `30 – 40 minutes` / `6 each`.
+1. **Quick Halt bed capacity:** PSC lists a single `2–4` for “Quick Halt 402 and 403” combined; both `hdt-402` and `hdt-403` currently use that figure. Question sent to vendor and PSC lead — pending response on per-model beds.
+2. **Quick Halt setup:** PSC `90 seconds, 2 people`; `HDT_Quick-Halt_TAC_Shelter_08.pdf` Set-up `2–5 minutes` (402) / `3–6 minutes` (403), 2 personnel. Question sent to vendor and PSC lead — pending response.
+3. **3236A Airbeam setup:** PSC `40 min with 8 people`; `HDT_32SeriesAirBeam_17.pdf` Set-Up `30 – 40 minutes` / `6 each`. Question sent to vendor and PSC lead — pending response.
 
 ## Parked / future work
 
