@@ -23,8 +23,8 @@
         name: 'BLU-MED',
         logo: 'logos/blumed.png',
         products: [
-          { id: 'blumed-2032', name: '2032.5 XPH', type: 'shelter' },
-          { id: 'blumed-2039', name: '2039 XPH', type: 'shelter' },
+          { id: 'blumed-2032', name: 'XPH 2032.5', type: 'shelter' },
+          { id: 'blumed-2039', name: 'XPH 2039', type: 'shelter' },
         ],
       },
       {
@@ -45,6 +45,7 @@
         name: 'HDT',
         logo: 'logos/hdt.png',
         products: [
+          { id: 'hdt-3236a', name: 'Airbeam 3236A', type: 'shelter', tested: false },
           { id: 'hdt-305', name: 'Base-X 305', type: 'shelter' },
           { id: 'hdt-505', name: 'Base-X 505', type: 'shelter', tested: false },
           {
@@ -56,17 +57,16 @@
           },
           { id: 'hdt-402', name: 'Quick Halt 402', type: 'shelter', tested: false },
           { id: 'hdt-403', name: 'Quick Halt 403', type: 'shelter', tested: false },
-          { id: 'hdt-3236a', name: '3236A Airbeam', type: 'shelter', tested: false },
         ],
       },
       {
         name: 'Western Shelter',
         logo: 'logos/western-shelter.png',
         products: [
-          { id: 'ws-gk20', name: 'GK-20', type: 'shelter' },
-          { id: 'ws-gk1935', name: 'GK-1935', type: 'shelter' },
-          { id: 'ws-gk2360', name: 'GateKeeper 2360', type: 'shelter', tested: false },
+          { id: 'ws-gk20', name: 'GateKeeper 20', type: 'shelter' },
+          { id: 'ws-gk1935', name: 'GateKeeper 1935', type: 'shelter' },
           { id: 'ws-gk2342', name: 'GateKeeper 2342', type: 'shelter', tested: false },
+          { id: 'ws-gk2360', name: 'GateKeeper 2360', type: 'shelter', tested: false },
           { id: 'ws-guardian-2032', name: 'Guardian 2032', type: 'shelter', tested: false },
           { id: 'ws-guardian-3065', name: 'Guardian 3065', type: 'shelter', tested: false },
         ],
@@ -75,16 +75,16 @@
         name: 'ZUMRO',
         logo: 'logos/zumro.png',
         products: [
-          { id: 'zumro-400', name: 'Model 400', type: 'shelter' },
-          { id: 'zumro-600', name: 'Model 600', type: 'shelter' },
-          { id: 'zumro-216', name: 'Model 216', type: 'shelter', tested: false },
-          { id: 'zumro-900', name: 'Model 900', type: 'shelter', tested: false },
           {
             id: 'zumro-airlock',
-            name: 'External Airlock Shelter System',
+            name: 'External Airlock',
             type: 'connector',
             tested: false,
           },
+          { id: 'zumro-216', name: 'Model 216', type: 'shelter', tested: false },
+          { id: 'zumro-400', name: 'Model 400', type: 'shelter' },
+          { id: 'zumro-600', name: 'Model 600', type: 'shelter' },
+          { id: 'zumro-900', name: 'Model 900', type: 'shelter', tested: false },
           { id: 'zumro-quad', name: 'QUAD Interface', type: 'connector' },
         ],
       },
