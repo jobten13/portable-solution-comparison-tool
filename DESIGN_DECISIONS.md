@@ -52,11 +52,14 @@ Decisions made during planning that shaped the tool. Captured here so the trail 
 
 ## Vendor verification backlog
 
-Unresolved PSC ↔ individual-source conflicts / anomalies (do not resolve in data without vendor confirmation). The items below have been **sent to the vendor and PSC lead** and are **pending response**:
+Unresolved PSC ↔ individual-source conflicts / anomalies. The vendor has responded to the items below; the tool continues to use PSC values under the standing sourcing rule, and the PSC holder—copied on the vendor correspondence—owns any PSC correction:
 
-1. **Quick Halt bed capacity:** PSC lists a single `2–4` for “Quick Halt 402 and 403” combined; both `hdt-402` and `hdt-403` currently use that figure. Question sent to vendor and PSC lead — pending response on per-model beds.
-2. **Quick Halt setup:** PSC `90 seconds, 2 people`; `HDT_Quick-Halt_TAC_Shelter_08.pdf` Set-up `2–5 minutes` (402) / `3–6 minutes` (403), 2 personnel. Question sent to vendor and PSC lead — pending response.
-3. **3236A Airbeam setup:** PSC `40 min with 8 people`; `HDT_32SeriesAirBeam_17.pdf` Set-Up `30 – 40 minutes` / `6 each`. Question sent to vendor and PSC lead — pending response.
+1. **Quick Halt setup — OPEN:** PSC `90 seconds, 2 people`; `HDT_Quick-Halt_TAC_Shelter_08.pdf` Set-up `2–5 minutes` (402) / `3–6 minutes` (403), 2 personnel. Vendor clarified that PSC’s `90 seconds` covers only raising the shelter, with a few additional minutes required to stake it—consistent with the individual-sheet figures. Per the standing rule, the tool keeps the PSC value; the PSC holder owns any PSC correction. Tool value unchanged.
+2. **3236A Airbeam setup — OPEN:** PSC `40 min with 8 people`; `HDT_32SeriesAirBeam_17.pdf` Set-Up `30 – 40 minutes` / `6 each`. Vendor clarified that the individual sheet’s `6 personnel` is a military-crew figure; realistically, 8 people minimum and up to 12 are needed to achieve setup in under 40 minutes, supporting PSC’s stated `8 people`. Per the standing rule, the tool keeps the PSC value; the PSC holder owns any PSC correction. Tool value unchanged.
+
+## Resolved vendor confirmations
+
+1. **Quick Halt bed capacity — RESOLVED:** Vendor confirmed per-model capacity: Quick Halt 402 is `2–3` beds and Quick Halt 403 is `4–5` beds. Applied to `data.js` display and filter values.
 
 ## Parked / future work
 

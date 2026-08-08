@@ -380,7 +380,7 @@
         },
       },
       'hdt-402': {
-        bedCapacity: '2 to 4',
+        bedCapacity: '2 to 3',
         extDims: "180 sq ft (15' × 12')",
         intDims: '180 sq ft',
         wind: '55 mph sustained for one hour, 65 mph gust for 10min',
@@ -393,13 +393,13 @@
         repair:
           'Each shelter comes with repair kit for typical field repairs. Parts can be ordered as needed.',
         filter: {
-          bedCapacity: { min: 2, max: 4 },
+          bedCapacity: { min: 2, max: 3 },
           extSqFt: 180,
           intSqFt: 180,
         },
       },
       'hdt-403': {
-        bedCapacity: '2 to 4',
+        bedCapacity: '4 to 5',
         extDims: "270 sq ft (15' × 18')",
         intDims: '270 sq ft',
         wind: '55 mph sustained for one hour, 65 mph gust for 10min',
@@ -412,7 +412,7 @@
         repair:
           'Each shelter comes with repair kit for typical field repairs. Parts can be ordered as needed.',
         filter: {
-          bedCapacity: { min: 2, max: 4 },
+          bedCapacity: { min: 4, max: 5 },
           extSqFt: 270,
           intSqFt: 270,
         },
