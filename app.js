@@ -649,6 +649,14 @@
       }
       btn.textContent = '+';
       btn.classList.remove('is-qty-flash');
+      btn.classList.remove('is-pulsing');
+    }
+
+    function pulseQuickAdd(btn) {
+      if (!btn) return;
+      btn.classList.remove('is-pulsing');
+      void btn.offsetWidth;
+      btn.classList.add('is-pulsing');
     }
 
     function flashQuickAddQty(btn, qty) {
@@ -659,6 +667,7 @@
       }
       btn.textContent = '\u00d7' + qty;
       btn.classList.add('is-qty-flash');
+      pulseQuickAdd(btn);
       if (col != null) {
         quickAddFlashTimers[col] = setTimeout(function () {
           btn.textContent = '+';
