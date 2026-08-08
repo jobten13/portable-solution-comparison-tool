@@ -793,6 +793,24 @@ td.value-cell.is-filter-nonconforming {
   background: var(--bg);
 }
 
+.help-illus-build-sequence {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+.help-illus-quick-add-row {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.build-list-quick-add.help-illus-quick-add {
+  pointer-events: none;
+  cursor: default;
+  background: var(--accent-soft);
+}
+
 .help-illus-build-list {
   display: inline-flex;
   align-items: center;
