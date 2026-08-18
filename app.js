@@ -30,6 +30,13 @@
     return null;
   }
 
+  function isProductInPicker(vendor, product) {
+    if (product.tested === false && vendor.structure !== 'hard-sided') {
+      return false;
+    }
+    return true;
+  }
+
   var FILTER_FIELD_DEFS = [
     { key: 'bedCapacity', direction: 'min' },
     { key: 'intSqFt', direction: 'min' },
@@ -142,14 +149,23 @@
       extSqFt: { min: null, max: null },
       intSqFt: { min: null, max: null },
     };
-    var ids = Object.keys(data.specs);
     var i;
     var j;
-    for (i = 0; i < ids.length; i++) {
-      var filter = data.specs[ids[i]].filter;
-      if (!filter) continue;
-      for (j = 0; j < FILTER_FIELD_KEYS.length; j++) {
-        addFilterFieldToBounds(bounds, FILTER_FIELD_KEYS[j], filter[FILTER_FIELD_KEYS[j]]);
+    var k;
+    for (i = 0; i < data.vendors.length; i++) {
+      var vendor = data.vendors[i];
+      for (j = 0; j < vendor.products.length; j++) {
+        var product = vendor.products[j];
+        if (!isProductInPicker(vendor, product)) continue;
+        var spec = data.specs[product.id];
+        if (!spec || !spec.filter) continue;
+        for (k = 0; k < FILTER_FIELD_KEYS.length; k++) {
+          addFilterFieldToBounds(
+            bounds,
+            FILTER_FIELD_KEYS[k],
+            spec.filter[FILTER_FIELD_KEYS[k]]
+          );
+        }
       }
     }
     return bounds;
@@ -227,6 +243,15 @@
 
     var hardDividerInserted = false;
     data.vendors.forEach(function (vendor) {
+      var visible = [];
+      vendor.products.forEach(function (p) {
+        if (isProductInPicker(vendor, p)) {
+          visible.push(p);
+        }
+      });
+      if (visible.length === 0) {
+        return;
+      }
       if (vendor.structure === 'hard-sided' && !hardDividerInserted) {
         var divider = document.createElement('option');
         divider.disabled = true;
@@ -237,7 +262,7 @@
       }
       var group = document.createElement('optgroup');
       group.label = vendor.name;
-      vendor.products.forEach(function (p) {
+      visible.forEach(function (p) {
         var opt = document.createElement('option');
         opt.value = p.id;
         opt.textContent = flatOptionLabel(p);

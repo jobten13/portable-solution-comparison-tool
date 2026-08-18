@@ -11,14 +11,14 @@ Open `index.html` in a browser (double-click or any static file server). No buil
 ## What’s in v2
 
 - **Flat-table UI:** five product columns, one spec label column, ten specification rows.
-- **Product picker:** options grouped under vendor `<optgroup>` headers; option text is the **product name** (plus ` *` if untested). The selected product name shows in bold. Re-select **Select a product ▾** to clear a column.
-- **Filtering:** sticky filter bar with three number inputs (Bed Capacity min, Internal Floorspace min, External Footprint max). Non-matching products are disabled in the dropdowns. A column whose selected product no longer matches greys out (header + cells); the selection is kept. Greying clears when the product conforms again, the column is cleared, or all filters are removed. The ⓘ info popover stays clickable on greyed columns.
+- **Product picker:** options grouped under vendor `<optgroup>` headers; option text is the **product name** (plus ` *` if untested). Soft-sided products with `tested: false` are omitted from the picker; hard-sided vendors (`structure: 'hard-sided'`) remain listed even when untested. The selected product name shows in bold. Re-select **Select a product ▾** to clear a column.
+- **Filtering:** sticky filter bar with three number inputs (Bed Capacity min, Internal Floorspace min, External Footprint max). Input min/max guardrails and matching are computed from **picker-visible** products only. Non-matching products are disabled in the dropdowns. A column whose selected product no longer matches greys out (header + cells); the selection is kept. Greying clears when the product conforms again, the column is cleared, or all filters are removed. The ⓘ info popover stays clickable on greyed columns.
 - **Cell display:** string values as-is; `null` → **TBD** pill; bed capacity on **connector** products → **N/A**.
 - **Vendor logos:** each vendor's logo appears below the column dropdown when a product is selected.
 - **Sticky header:** the filter bar sticks at the top of the viewport; the untested banner (when visible) and the dropdown/logo row stick just below it on scroll.
 - **Row pinning:** pin a spec row to move it to the top of the table for the session (unpin to restore default order).
 - **Product notes:** ⓘ appears beside the vendor logo when the selected product has an `infoText` field (click to open/close the shared popover), including when that product is also untested.
-- **Untested products:** products not independently tested by UC Davis show ` *` after the name in the dropdown. When any selected column is untested, a sticky header banner states: *Indicates products included in the Portable Solution Catalog, but not independently tested by UC Davis during any IMPACTS project events or exercises.*
+- **Untested products:** products not independently tested by UC Davis that **appear in the picker** (hard-sided vendors only) show ` *` after the name. Other `tested: false` products stay in `data.js` but are omitted from the dropdown. When any selected column is untested, a sticky header banner states: *Indicates products included in the Portable Solution Catalog, but not independently tested by UC Davis during any IMPACTS project events or exercises.*
 - **Scope:** vestibules and multi-bed configuration rows are out of scope for v1 (see [DESIGN_DECISIONS.md](DESIGN_DECISIONS.md)).
 
 ## File roles
@@ -49,12 +49,13 @@ Expose one object on `window.VPC_COMPARISON_DATA`:
 
 - `name` — display name (used as the `<optgroup>` label in dropdowns).
 - `logo` — path to the vendor’s logo image (e.g. `logos/dlx.png`); shown below the dropdown when selected.
+- `structure: 'hard-sided'` — marks the vendor as hard-sided. Untested products from these vendors stay in the picker; untested products from other vendors are omitted.
 - `products` — `{ id, name, type }` where `type` is `shelter` or `connector`.
 
 **Product** (optional fields):
 
 - `infoText` — per-product note text; when present, drives the ⓘ popover for that product.
-- `tested: false` — marks the product as not independently tested by UC Davis. Appends ` *` to the dropdown label and shows the sticky header banner when any such product is selected.
+- `tested: false` — marks the product as not independently tested by UC Davis. Soft-sided untested products are omitted from the picker. Hard-sided untested products remain selectable, append ` *` to the dropdown label, and show the sticky header banner when selected.
 
 **`filter`** on each `specs` entry (required for filtering): hand-authored structured values separate from display strings:
 
